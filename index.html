@@ -1,0 +1,1053 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2f64e0"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Saints Baseball"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="config.js"></script>
+<title>Saints Baseball</title>
+<style>
+:root{--bg:#f4f2ec;--card:#fff;--ink:#17202b;--mut:#5f6874;--line:#dedad0;--acc:#2f64e0;--accink:#fff;--gold:#0b2a6f;--goldink:#fff;--warn:#b3261e;--ok:#17803f;--chip:#ebe8df;--nav:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1319;--card:#1a2029;--ink:#eeece6;--mut:#99a1ac;--line:#2f3641;--acc:#7aa2ff;--accink:#0a1f55;--gold:#bcd0ff;--goldink:#0b2a6f;--warn:#ff8a80;--ok:#6fd49a;--chip:#252c37;--nav:#141a22}}
+:root[data-theme="dark"]{--bg:#0f1319;--card:#1a2029;--ink:#eeece6;--mut:#99a1ac;--line:#2f3641;--acc:#7aa2ff;--accink:#0a1f55;--gold:#bcd0ff;--goldink:#0b2a6f;--warn:#ff8a80;--ok:#6fd49a;--chip:#252c37;--nav:#141a22}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.2px;line-height:1.1}.brand img{width:46px;height:46px;border-radius:10px;flex:none}.brand small{display:block;font-weight:500;font-size:12px;color:var(--mut);letter-spacing:0;margin-top:2px}
+.streak{background:var(--gold);color:var(--goldink);font-weight:800;border-radius:999px;padding:6px 12px;font-size:15px;white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.card h3{margin:0 0 4px;font-size:16px}.mut{color:var(--mut);font-size:13px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chips button.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}
+.cover{display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(170deg,#0d4fd0 0%,#033da9 55%,#0b2a6f 100%);color:#fff;border-radius:22px;padding:26px 16px 22px;margin:8px 0 12px;box-shadow:0 8px 24px rgba(3,61,169,.28)}
+.cover img{width:min(62vw,230px);height:auto;border-radius:30px;box-shadow:0 6px 22px rgba(0,0,0,.35)}.cover .cv1{margin-top:16px;font-weight:900;font-size:24px;letter-spacing:1.5px}.cover .cv2{margin-top:4px;opacity:.85;font-size:14px}
+.hero{background:linear-gradient(165deg,#3b72ee,#2554cf);color:#fff;border-color:#2f64e0}.hero .mut{color:inherit;opacity:.85}
+.strip{display:grid;grid-template-columns:36px repeat(7,1fr) 36px;gap:4px;align-items:center;margin:6px 0}
+.strip button.d{padding:6px 0;min-height:56px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;line-height:1.1}
+.strip button.d b{font-size:17px}.strip button.d.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}.strip button.d.td{box-shadow:0 0 0 2px var(--gold)}
+.strip .arr{padding:0;min-height:44px}
+.dot{font-size:11px;height:13px}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;min-height:44px}
+button.p{background:var(--acc);color:var(--accink);border-color:var(--acc);font-weight:700}button:disabled{opacity:.5}
+.subs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.subs button{padding:10px 2px;min-height:48px;font-size:14px;font-weight:600;position:relative}.subs button.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}
+.subs .ck{position:absolute;top:2px;right:6px;font-size:11px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.scale label{display:block}.scale input{position:absolute;opacity:0}
+.scale span{display:block;text-align:center;padding:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--bg);cursor:pointer;font-weight:700;min-height:48px;color:var(--ink)}
+.hero .scale span{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);color:#fff}
+.scale input:checked+span{background:var(--gold);color:var(--goldink);border-color:var(--gold);transform:scale(1.04)}.hero .scale input:checked+span{background:#fff;color:#0b2a6f;border-color:#fff}
+.scale input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px}
+.big{font-size:19px;font-weight:700;margin:4px 0}.off{color:var(--mut);font-weight:500}
+.line{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+input[type=number],input[type=text],input[type=password],input[type=date],select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px;min-height:44px}
+input[type=number]{width:96px}textarea{width:100%;min-height:60px;resize:vertical}
+.chk{display:flex;gap:10px;align-items:center;min-height:44px;font-weight:600}.chk input{width:24px;height:24px;accent-color:var(--ok)}
+.cap{font-size:14px;padding:4px 10px;border-radius:8px;background:var(--chip)}.cap.over{color:var(--warn);font-weight:700}
+.ex{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}.ex:first-of-type{border-top:0}
+.ex .cd{font-weight:800;color:var(--mut)}.ex b{display:block}.ex input{width:84px}
+.pr{background:var(--gold);color:var(--goldink);font-size:11px;font-weight:800;padding:1px 6px;border-radius:6px;margin-left:6px}
+details{margin:8px 0}summary{cursor:pointer;font-weight:700;min-height:36px;display:flex;align-items:center}
+ul.l{margin:6px 0 6px 18px;padding:0}ul.l li{margin:3px 0}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--nav);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+.nav div{display:flex;width:100%;max-width:760px}
+.nav button{flex:1;border:0;border-radius:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:13px;font-weight:600;padding:10px 2px;min-height:74px;color:var(--mut)}
+.nav button span{font-size:27px;line-height:1.1}.nav button.on{color:var(--acc);font-weight:800}
+@media (display-mode:browser) and (max-width:899px){.nav{padding-bottom:calc(env(safe-area-inset-bottom) + 34px)}body{padding-bottom:calc(150px + env(safe-area-inset-bottom))}}
+@media (min-width:900px){.nav{top:0;bottom:auto;border-top:0;border-bottom:1px solid var(--line)}body{padding-bottom:20px;padding-top:70px}.nav button{flex-direction:row;justify-content:center;gap:8px;min-height:56px;font-size:14px}.nav button span{font-size:18px}}
+.wk button[style] span{color:inherit;opacity:1}.tg{font-weight:800;margin-top:2px;font-size:8.5px;letter-spacing:-.3px}.tg2{font-size:9px;font-weight:700;letter-spacing:.2px}.wk button:not([style]) .tg2{color:var(--mut)}
+.cb{display:block;width:70%;height:5px;border-radius:3px}.strip button.d.on .cb{box-shadow:0 0 0 1px #fff}
+.lg{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--mut);margin:6px 0}.lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-2px}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin-top:8px}
+.wk button{padding:5px 0;overflow:hidden;min-width:0;min-height:64px;font-size:11px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.15}
+.wk button b{font-size:14px}.wk button.td{box-shadow:0 0 0 2px var(--gold)}.wk button.ci{background:var(--chip)}
+.tg{font-size:10px;font-weight:800;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
+.tw{overflow-x:auto}.r-low{color:var(--warn);font-weight:700}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.bd{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;font-size:13px;background:var(--bg)}.bd i{display:block;font-style:normal;font-size:28px}.bd.lock{opacity:.4;filter:grayscale(1)}
+.msg{padding:10px 12px;border-radius:10px;background:var(--chip);margin:10px 0;font-size:14px}
+#toast{position:fixed;left:50%;top:14px;transform:translate(-50%,-140%);background:var(--gold);color:var(--goldink);font-weight:800;padding:12px 18px;border-radius:14px;z-index:20;max-width:92vw;text-align:center;transition:transform .35s ease;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+#toast.on{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}.scale input:checked+span{transform:none}}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:19}
+.save{font-size:12px;color:var(--mut);min-height:16px}
+.ex2{padding:10px 0;border-top:1px solid var(--line)}.ex2:first-of-type{border-top:0}.exh{display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:center}.exh .cd{font-weight:800;color:var(--mut)}.exh b{display:block}
+.sets{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0 42px}.st{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:2px}.st input{width:78px}
+.medal{font-size:17px}
+.row{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px solid var(--line)}.row:first-child{border-top:0}
+
+/* ---- polish pass ---- */
+:root{--bg:#eef1f7;--card:#fff;--ink:#0d1b36;--mut:#5d6b82;--line:#e2e7f0;--acc:#1f56d6;--gold:#0b2a6f;--chip:#e8edf6;--nav:rgba(255,255,255,.92);--sh:0 1px 2px rgba(13,27,54,.06),0 4px 14px rgba(13,27,54,.06)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a111f;--card:#141d2e;--ink:#eaf0fb;--mut:#9aa8c0;--line:#243049;--chip:#1c2740;--nav:rgba(16,24,40,.92);--sh:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25)}}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{padding:calc(10px + env(safe-area-inset-top)) 14px 12px}
+.top{padding:4px 2px 10px}
+.brand{font-size:18px}.brand img{width:44px;height:44px;border-radius:12px;box-shadow:var(--sh)}
+.streak{background:linear-gradient(135deg,#0b2a6f,#1f56d6);color:#fff;box-shadow:0 2px 8px rgba(31,86,214,.35);padding:7px 13px}
+.card{border:0;border-radius:18px;padding:16px;margin:12px 0;box-shadow:var(--sh)}
+.card h3{font-size:17px;font-weight:800;letter-spacing:-.2px;margin:0 0 6px}
+.mut{line-height:1.4}
+.hero{background:linear-gradient(160deg,#2a63e6 0%,#1346b8 60%,#0b2a6f 100%);box-shadow:0 8px 24px rgba(19,70,184,.35)}
+.cover{border-radius:24px}
+button{border-radius:14px;font-weight:600;transition:transform .08s ease,background .15s ease,box-shadow .15s ease;border:1px solid var(--line)}
+button:active{transform:scale(.97)}
+button.p{background:linear-gradient(180deg,#2a63e6,#1a4dc4);border-color:#1a4dc4;box-shadow:0 2px 8px rgba(31,86,214,.3)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(31,86,214,.35);outline-offset:1px}
+input[type=number],input[type=text],input[type=password],input[type=date],input[type=email],select,textarea{border-radius:12px;border:1.5px solid var(--line);background:var(--card);padding:10px 12px;font-size:16px}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+.subs{gap:8px}.subs button{border-radius:14px;background:var(--card);box-shadow:var(--sh);border:0}
+.subs button.on{background:linear-gradient(180deg,#2a63e6,#1a4dc4);color:#fff}
+.chips button{border-radius:999px}
+.scale{gap:8px}.scale span{border-radius:14px;border:1.5px solid var(--line);background:var(--card);min-height:52px;font-size:18px;display:flex;align-items:center;justify-content:center;padding:0}
+.scale input:checked+span{background:linear-gradient(180deg,#2a63e6,#0b2a6f);color:#fff;border-color:#0b2a6f;box-shadow:0 4px 12px rgba(11,42,111,.35)}
+.hero .scale span{background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.35);color:#fff}
+.hero .scale input:checked+span{background:#fff;color:#0b2a6f;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.strip button.d{border-radius:14px;border:0;background:var(--card);box-shadow:var(--sh)}
+.strip button.d.on{background:linear-gradient(180deg,#2a63e6,#1a4dc4);color:#fff}
+.wk button{border-radius:12px;border:0;box-shadow:none}
+.row{padding:9px 0;border-top:1px solid var(--line)}
+.row b{font-weight:700}
+.bd{border-radius:16px;border:0;background:var(--chip);padding:12px 8px}.bd.lock{opacity:.45}
+.msg{border-radius:14px;background:var(--card);box-shadow:var(--sh);border-left:4px solid var(--acc)}
+.nav{background:var(--nav);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(13,27,54,.08)}
+.nav button{position:relative;background:transparent;box-shadow:none;border:0;border-radius:0;transition:color .15s}
+.nav button.on{color:var(--acc)}
+.nav button.on::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;border-radius:0 0 4px 4px;background:var(--acc)}
+.nav button.on span{transform:translateY(-1px) scale(1.08)}
+.nav button span{transition:transform .15s}
+table{font-size:13px}th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--mut)}
+details.card summary{font-size:15px}
+::selection{background:rgba(31,86,214,.25)}
+html{scroll-behavior:smooth}
+@media (min-width:900px){.wrap{padding-top:12px}.nav button.on::before{top:auto;bottom:0;border-radius:4px 4px 0 0}}
+#toast{transform:translate(-50%,-220%);visibility:hidden;top:calc(12px + env(safe-area-inset-top))}#toast.on{transform:translate(-50%,0);visibility:visible}
+.subs.sc{display:flex;overflow-x:auto;gap:8px;padding:4px 2px 8px;margin:8px -2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.subs.sc::-webkit-scrollbar{display:none}.subs.sc button{flex:none;padding:10px 16px;white-space:nowrap;min-height:46px;border-radius:999px}
+a{color:var(--acc)}ul.l a{text-decoration:none;font-weight:600}ul.l li{margin:6px 0}
+</style>
+<canvas id="fx"></canvas><div id="toast" role="status" aria-live="polite"></div>
+<div class="wrap">
+<div class="top"><div class="brand"><img src="data:image/png;base64,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" alt="Saints Baseball"><div>Saints Baseball<small id="who">Winter Ramp</small></div></div><div class="streak" id="stk" hidden></div></div>
+<div id="app"></div>
+</div>
+<nav class="nav"><div id="nav"></div></nav>
+<script>
+// ---------- schedule (from WINTER RAMP TEMPLATE v2) ----------
+const R="RECOVERY 60 - 90 feet",O="OFF",MD="MODERATE DAY";
+const LT90a="LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN";
+const LT90b="LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)";
+const LT100a="LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET (GET VELO)";
+const LT100b="LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET (GET VELO)";
+const XM="OFF (CHRISTMAS)",PEN85="OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY";
+const PEN75="OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS";
+const PLATE="OVER THE PLATE PEN 15-20p, 100%, FB FOCUS";
+const F3=n=>`FIRST 3 PEN 5 BATTERS, ${n}% MODERATE THROWING BEFORE`;
+const LV=(p,s)=>`LIVE ${p}P ${s} SET${s>1?"S":""}`;
+const GAME=["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"];
+const COMMON=[
+ [R,O,R,O,R,O,O],
+ ["MODERATE DAY 120 FEET 70% (NO OFFSPEED)",O,R,O,R,R,O],
+ ["MODERATE DAY 150 FEET 75% (INTRODUCE OFFSPEED)",R,O,"MODERATE DAY 180 FEET 80% (OFFSPEED)",R,O,O],
+ [LT90a,R,O,R,LT90b,O,O],
+ [LT100a,R,O,R,LT100b,O,O]];
+const W6a=[LT100b,R,O,R,XM,PEN85,O], W6b=[R,LT100b,O,R,XM,PEN85,O];
+const W7a=[R,PEN75,R,O,R,PLATE,O], W7b=[R,PEN75,R,O,R,"OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS",O];
+const FSt=[[R,F3(80),O,R,LV("20-25",1),O,O],
+ [MD,F3(80),O,R,LV("35-40",2),O,R],[MD,F3(80),O,R,LV("50-55",3),O,R],[MD,F3(80),O,R,LV("60-65",4),O,R],[MD,F3(80),O,R,LV("70-75",5),O,R]];
+const SS=[[R,R,F3(80),O,R,LV("20-25",1),O],
+ [R,MD,F3(80),O,R,LV("35-40",2),O],[R,MD,F3(80),O,R,LV("50-55",3),O],[R,MD,F3(80),O,R,LV("60-65",4),O],[R,MD,F3(80),O,R,LV("70-75",5),O]];
+const FR=[[MD,F3(80),O,R,LV("20-25",1),O,R],[MD,F3(90),O,R,LV("20-25",1),O,R],[MD,F3(90),O,R,LV("30-35",2),O,R],[MD,F3(100),O,R,LV("30-35",2),O,R],
+ [MD,"OVER THE PLATE PEN 15P 100%",O,R,LV("45-50",3),O,R]];
+const SR=[[R,MD,F3(80),O,R,LV("20-25",1),O],[R,MD,F3(90),O,R,LV("30-35",2),O],[R,MD,F3(90),O,R,LV("30-35",2),O],[R,MD,F3(100),O,R,LV("40-45",3),O],
+ [R,MD,"OVER THE PLATE PEN 15P 100%",O,R,LV("45-50",3),O]];
+const GROUPS={
+ FS:{name:"Friday starter",w:[...COMMON,W6a,W7a,FSt[0],...FSt.slice(1),GAME]},
+ SS:{name:"Saturday starter",w:[...COMMON,W6b,W7a,...SS,GAME]},
+ FR:{name:"Friday reliever",w:[...COMMON,W6a,W7b,...FR,GAME]},
+ SR:{name:"Saturday reliever",w:[...COMMON,W6a,W7b,...SR,GAME]},
+ PP:{name:"Position player",w:Array.from({length:13},()=>Array(7).fill("OFF (position player: no throwing)"))}};
+// FS weeks: 8 = idx7 ... ensure 13 weeks
+const PHASE=["LIGHT BUILD WEEK","MODERATE BUILD BEGINS","MODERATE BUILD (LIGHT OFFSPEED)","VELO PHASE BEGINS (recovery days: very light offspeed)","RUN AND GUN, TRACK VELO, THROW HARD!","FIRST MOUND WORK, LAST VELO DAY, FOCUS SHIFTS TO PITCHING > THROWING","MOUND WEEK, MIDWEEK PEN","LAST WEEK ON OWN, LIVE IF POSSIBLE","BACK TO CAMPUS","","","","GAME WEEK"];
+const LIFT=["LIFT DAY","POS PLAYER SPRINT DAY","LIFT DAY","LIFT DAY","OFF","POS PLAYER SPRINT DAY","OFF"];
+const DN=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const key=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const dayDate=(w,i)=>new Date(2026,10,16+7*w+i);
+function liftFor(w,i){let t=LIFT[i];if(w===0&&i===0){}
+ if(w===5||w===6){if(i===1||i===5)t+=" (AFTER THROWING)"}
+ if(w===7&&i===2)t="LIFT DAY (AFTER THROWING)";
+ if(w===1&&i===3)t="OFF";   // Thanksgiving
+ return t}
+const PERSONAL={"adkins":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET\nIF NOT POSSIBLE 100% PEN","OFF","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 35-40P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 50-55P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 60-65P 4 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 70-75P 5 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"forton":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET\nIF NOT POSSIBLE 100% PEN","OFF","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 35-40P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 50-55P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 60-65P 4 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 70-75P 5 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"whitesell":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"snider":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"cones":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"flynn":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"okeefe":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"tippie":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF","RECOVERY 60 - 90 feet"],["MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF","RECOVERY 60 - 90 feet"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"stiles":[["","","","","","",""],["","","","","","",""],["","","","","","",""],["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet (Christmas if you cant today do it the 24th)","OFF","OFF"],["OFF","LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF"],["OFF","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF"],["RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","OFF","RECOVERY 60 - 90 feet","OFF","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"wichmann":[["RECOVERY 60 - 90 feet","OFF","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% , FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 35-40P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 50-55P 3 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 60-65P 4 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 70-75P 5 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"dickhaut":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% , FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 35-40P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 50-55P 3 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 60-65P 4 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 70-75P 5 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"hanna":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 35-40P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 55-60P 4 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"loparo":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 35-40P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 55-60P 4 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"bach":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 40-45P 3 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"rice":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 40-45P 3 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]],"maggard":[["RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF","OFF"],["MODERATE DAY 120 FEET 70% (NO OFFSPEED)","OFF","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","RECOVERY 60 - 90 feet","OFF"],["MODERATE DAY150 FEET 75% (INTRODUCE OFFSPEED)","RECOVERY 60 - 90 feet","OFF","MODERATE DAY 180 FEET 80%(OFFSPEED)","RECOVERY 60 - 90 feet","OFF","OFF"],["LONG TOSS, 90% INTENT, LIMITED PULLDOWNS ON WAY BACK IN","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 90% INTENT, PULLDOWNS EVERY 15-20 FEET ON WAY BACK IN, MAX OF 15 (GUN LAST 3)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5 RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7 RUN AND GUN INTO NET(GET VELO)","OFF","OFF"],["LONG TOSS, 100% INTENT, PULLDOWNS EVERY 30 FEET ON WAY BACK IN, 5-7RUN AND GUN INTO NET(GET VELO)","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OFF (CHRISTMAS)","OVER THE MOUND PEN 15-20p, 85-90% MODERATE THROWING BEFORE, FB ONLY","OFF"],["RECOVERY 60 - 90 feet","OVER THE MOUND PEN 15-20p, 75-80% MODERATE THROWING BEFORE, OFFSPEED FOCUS","RECOVERY 60 - 90 feet","OFF","RECOVERY 60 - 90 feet","OVER THE PLATE PEN 15-20p, 100% MODERATE THROWING BEFORE, FB FOCUS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 80% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 20-25P 1 SET","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 90% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 30-35P 2 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","FIRST 3 PEN 5 BATTERS, 100% MODERATE THROWING BEFORE","OFF","RECOVERY 60 - 90 feet","LIVE 40-45P 3 SETS","OFF"],["RECOVERY 60 - 90 feet","MODERATE DAY","OVER THE PLATE PEN 15P 100%","OFF","RECOVERY 60 - 90 feet","LIVE 45-50P 3 SETS","OFF"],["NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","NEW SHEET FOR GAME WEEK","WV WESLEYAN","WV WESLEYAN","WV WESLEYAN"]]};
+const hasThrow=pid=>!!PERSONAL[pid];
+function thFor(pid,w,i){const P=PERSONAL[pid];if(!P)return"";let t=(P[w]&&P[w][i])||"";if(w===1&&i===3&&t)t="OFF (Happy Thanksgiving!)";return t}
+function throwFor(g,w,i){let t=GROUPS[g].w[w][i];if(w===1&&i===3)t="OFF (Happy Thanksgiving!)";return t}
+// intent -> velo cap: MAX x (FLOOR + (1-FLOOR) x INTENT), floor 50%
+function intentOf(t){const u=t.toUpperCase();
+ if(/^OFF|NEW SHEET|WESLEYAN|PEN|LIVE/.test(u))return null;
+ if(u.startsWith("RECOVERY"))return .6;
+ const m=u.match(/(\d+)%/);if(m){const p=+m[1]/100;return p>=1?null:p}
+ if(u.startsWith("MODERATE DAY"))return .8;return null}
+function capFor(max,t){const i=intentOf(t);if(!max||i==null)return null;return Math.round(max*(.5+.5*i)*10)/10}
+const todayKey=()=>key(new Date());
+const weekOf=k=>{const [y,m,d]=k.split("-").map(Number);const n=Math.floor((new Date(y,m-1,d)-new Date(2026,10,16))/864e5);return Math.floor(n/7)};
+
+// ---------- state ----------
+const API=window.TMU_API||"";
+let roster=[],program=null,me=null,pin="",coachPin="",isCoach=false,players=[],board=[],prs=[],chat=[],week=null,boardErr="",pinned=null,viewing=false,stash=null,tab="today",sub="throw",sel=todayKey(),ctab="team",dsel=null,status="",loaded=false,err="",loginErr="",loginPick="",showCoachLogin=false,rost=null;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=id=>document.getElementById(id);
+const dIdx=k=>(new Date(k+"T12:00").getDay()+6)%7;
+const addDays=(k,n)=>{const d=new Date(k+"T12:00");d.setDate(d.getDate()+n);return key(d)};
+const monOf=k=>addDays(k,-dIdx(k));
+const longDate=k=>{const d=new Date(k+"T12:00");return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()]+", "+MON[d.getMonth()]+" "+d.getDate()};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+function call(action,data){if(viewing&&action==="save")return Promise.resolve({ok:true});const body=JSON.stringify({action,...data});
+ return new Promise((res,rej)=>{
+  const done=t=>{try{const j=typeof t==="string"?JSON.parse(t):t;j.error?rej(new Error(j.error)):res(j)}catch(e){rej(e)}};
+  if(window.google&&google.script&&google.script.run)google.script.run.withSuccessHandler(done).withFailureHandler(e=>rej(new Error((e&&e.message)||e))).api(body);
+  else fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body}).then(r=>r.text()).then(done).catch(rej)})}
+const creds=()=>({playerId:me.playerId});
+let q=Promise.resolve();
+const queue=fn=>{q=q.then(fn).catch(e=>{status="Couldn't save: "+(e.message||e)+" (will retry)";paintStatus()});return q};
+const groupOf=()=>(me&&me.group)||"";
+const ROLES={P:"Pitcher",H:"Hitter",TW:"Two-way"},ROLEORD={P:0,TW:1,H:2};
+const roleFor=(pid,g)=>ROLES[g]?g:(hasThrow(pid)?"P":"H");
+const myRole=()=>roleFor(me.playerId,me.group);
+const showThrow=()=>(myRole()==="P"||myRole()==="TW")&&hasThrow(me.playerId);
+const showHit=()=>myRole()==="H"||myRole()==="TW";
+function myHit(pid){const E=pid===me.playerId?ents():{},wk={};let sessions=0;for(const k of Object.keys(E)){const h=E[k].hit;if(h&&+h.min>0){const ws=monOf(k);wk[ws]=(wk[ws]||0)+(+h.min);sessions++}}
+ const cur=monOf(todayKey()),keys=Object.keys(wk).sort(),done=keys.filter(k=>k<cur);let tot=0;keys.forEach(k=>tot+=wk[k]);let avg=wk[cur]||0;
+ if(done.length){const n=Math.round((new Date(addDays(cur,-7)+"T12:00:00")-new Date(done[0]+"T12:00:00"))/604800000)+1;avg=Math.round(done.reduce((a,k)=>a+wk[k],0)/n)}
+ return{wk,cur,sessions,tot,thisWeek:wk[cur]||0,last:wk[addDays(cur,-7)]||0,avg}}
+const HIT_TYPES=["Cage","Tee work","Soft toss","BP on the field","Live at-bats","Machine","Video / mental reps"];
+function setHit(k,patch){const cur=(ents()[k]||{}).hit||{};setEntry(k,{hit:{...cur,...patch}})}
+const maxOf=()=>+(me&&me.fallMax)||0;
+const ents=()=>(me&&me.entries)||{};
+function paintStatus(){const e=document.querySelector(".save");if(e)e.textContent=status}
+let dirtyE=new Set(),dirtyW=new Set(),dirtyP=false;
+function saveMe(){const ent={},w={};dirtyE.forEach(k=>ent[k]=me.entries[k]);dirtyW.forEach(k=>w[k]=me.weights[k]===undefined?null:me.weights[k]);
+ const prof=dirtyP?{group:me.group||"",fallMax:me.fallMax||0,goalWeight:me.goalWeight||0,email:me.email||""}:null;
+ const sE=dirtyE,sW=dirtyW,sP=dirtyP;dirtyE=new Set();dirtyW=new Set();dirtyP=false;
+ if(!Object.keys(ent).length&&!Object.keys(w).length&&!prof)return Promise.resolve();
+ status="Saving…";paintStatus();
+ return queue(async()=>{try{await call("save",{...creds(),entries:ent,weights:w,profile:prof});status="Saved ✓";paintStatus()}catch(e){sE.forEach(k=>dirtyE.add(k));sW.forEach(k=>dirtyW.add(k));if(sP)dirtyP=true;throw e}})}
+let st;function later(){clearTimeout(st);st=setTimeout(saveMe,700)}
+function setEntry(k,patch){me.entries=me.entries||{};me.entries[k]={...(me.entries[k]||{}),...patch};dirtyE.add(k);later()}
+addEventListener("pagehide",()=>{if(me&&(dirtyE.size||dirtyW.size||dirtyP))saveMe()});
+const DEFAULT_PROGRAM={
+ "name": "Winter Lifting Program (4-week block)",
+ "note": "Weeks cycle every 4",
+ "startWeek": 0,
+ "dayMap": {
+  "0": "d1",
+  "2": "d2",
+  "3": "d3"
+ },
+ "days": [
+  {
+   "id": "d1",
+   "title": "Day 1 · Lower",
+   "lifts": [
+    {
+     "id": "d1a1",
+     "code": "A1",
+     "name": "Barbell Front Squat",
+     "sets": "3 sets week 1, 4 sets week 2-4",
+     "reps": [
+      "5",
+      "4",
+      "3",
+      "3"
+     ]
+    },
+    {
+     "id": "d1a2",
+     "code": "A2",
+     "name": "Vertical Jump for Height",
+     "sets": "4 sets of 3 reps",
+     "reps": [
+      "3"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d1b1",
+     "code": "B1",
+     "name": "Barbell RDL",
+     "sets": "3 sets",
+     "reps": [
+      "6",
+      "6",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "d1b2",
+     "code": "B2",
+     "name": "BB BTW Leg ISO Hold",
+     "sets": "3 sets, 30 sec each leg",
+     "reps": [
+      "30 sec EA leg"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d1c1",
+     "code": "C1",
+     "name": "BFE Explosive Knee Drives",
+     "sets": "3 sets of 6 each leg",
+     "reps": [
+      "6 EA leg"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d1d1",
+     "code": "D1",
+     "name": "Goblet Crossover Lunge",
+     "sets": "3 sets of 4 each",
+     "reps": [
+      "4 EA"
+     ]
+    },
+    {
+     "id": "d1e1",
+     "code": "E1",
+     "name": "1 Leg Physioball Ham Curl",
+     "sets": "3 sets of 5 each leg",
+     "reps": [
+      "5 EA leg"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d1f1",
+     "code": "F1",
+     "name": "Plank Circuit (Full Team)",
+     "sets": "3 rounds",
+     "reps": [
+      "15 / 15 / 15",
+      "15 / 20 / 20",
+      "20 / 20 / 20",
+      "20 / 25 / 30"
+     ],
+     "noWt": true
+    }
+   ]
+  },
+  {
+   "id": "d2",
+   "title": "Day 2 · Upper",
+   "lifts": [
+    {
+     "id": "d2a1",
+     "code": "A1",
+     "name": "1.5 Rep Bench Press",
+     "sets": "3 sets week 1, 4 sets week 2-4",
+     "reps": [
+      "6",
+      "5",
+      "4",
+      "3"
+     ],
+     "note": "BB for Pos./Inc. DB for P's"
+    },
+    {
+     "id": "d2a2",
+     "code": "A2",
+     "name": "Lying Medball Ex. Press (throw hard)",
+     "sets": "3 sets of 5",
+     "reps": [
+      "5"
+     ],
+     "noWt": true,
+     "note": "Throw as hard as possible"
+    },
+    {
+     "id": "d2b1",
+     "code": "B1",
+     "name": "Pull Ups",
+     "sets": "3 sets, until failure",
+     "reps": [
+      "AMAP"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d2b2",
+     "code": "B2",
+     "name": "AB Rippers on Bench",
+     "sets": "3 sets of :30",
+     "reps": [
+      ":30"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d2c1",
+     "code": "C1",
+     "name": "Med Ball Rot. Slams",
+     "sets": "3 x 4 each side",
+     "reps": [
+      "4 EA"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d2d1",
+     "code": "D1",
+     "name": "BB Partner Pyramid Curls",
+     "sets": "1 set, up to 10, down to 1",
+     "reps": [
+      "10 up, 10 down"
+     ]
+    },
+    {
+     "id": "d2e1",
+     "code": "E1",
+     "name": "Loaded Bar Holds",
+     "sets": "3 sets",
+     "reps": [
+      ":30"
+     ]
+    },
+    {
+     "id": "d2f1",
+     "code": "F1",
+     "name": "T-Spine Plate Slide",
+     "sets": "2 sets of 6 each",
+     "reps": [
+      "6 EA"
+     ],
+     "noWt": true
+    }
+   ]
+  },
+  {
+   "id": "d3",
+   "title": "Day 3 · Total",
+   "lifts": [
+    {
+     "id": "d3a1",
+     "code": "A1",
+     "name": "BB Deadlift",
+     "sets": "3 sets week 1, 4 sets week 2-4",
+     "reps": [
+      "5",
+      "5",
+      "4",
+      "3"
+     ]
+    },
+    {
+     "id": "d3a2",
+     "code": "A2",
+     "name": "BFE Depth Hold",
+     "sets": "3 sets of :15 each",
+     "reps": [
+      ":15 EA"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d3b1",
+     "code": "B1",
+     "name": "Alt. Chest Support DB Row",
+     "sets": "3 sets week 1, 4 sets week 2-4",
+     "reps": [
+      "6 EA"
+     ]
+    },
+    {
+     "id": "d3b2",
+     "code": "B2",
+     "name": "DB Pullovers",
+     "sets": "3 sets of 8",
+     "reps": [
+      "8"
+     ]
+    },
+    {
+     "id": "d3c1",
+     "code": "C1",
+     "name": "Forearm Curls DB or BB",
+     "sets": "3 sets until failure",
+     "reps": [
+      "Failure"
+     ]
+    },
+    {
+     "id": "d3d1",
+     "code": "D1",
+     "name": "Deficit Push Ups",
+     "sets": "3 sets of 10",
+     "reps": [
+      "10"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d3e1",
+     "code": "E1",
+     "name": "Russian Twist",
+     "sets": "3 sets of 20",
+     "reps": [
+      "20"
+     ],
+     "noWt": true
+    },
+    {
+     "id": "d3f1",
+     "code": "F1",
+     "name": "Arm Farm (your choice of bicep and tricep)",
+     "sets": "3 sets",
+     "reps": [
+      "Any"
+     ],
+     "noWt": true
+    }
+   ]
+  }
+ ],
+ "warmup": [
+  "Jog down and back, 30 yards",
+  "Forward skip with arm circles, 30 yards",
+  "Shuffle swings, 30 yards",
+  "Good mornings, 15 reps",
+  "Lateral lunge with overhead reach, 15 yards",
+  "Lunge elbow tuck with rotation, 15 yards",
+  "Backwards bear crawl, 15 yards",
+  "Skater jumps, 15 total",
+  "Rotation swings, 10 each way"
+ ],
+ "speed": {
+  "drills": [
+   {
+    "name": "Fast A Skip",
+    "note": "2 sets of 15 yards down and back"
+   },
+   {
+    "name": "Neon Deon's",
+    "note": "2 sets of 15 yards down and back"
+   },
+   {
+    "name": "Build Ups",
+    "note": "2 x 50%, 2 x 75%, 1 x 100%"
+   },
+   {
+    "name": "5-10-5 side shuffles",
+    "note": "6 total reps, 90 sec of rest"
+   },
+   {
+    "name": "15 yard push up starts",
+    "note": "8 total reps, 90 sec of rest"
+   },
+   {
+    "name": "Band Resisted Sprint Starts",
+    "note": "6 sets of 5 yards, 60 sec of rest"
+   }
+  ],
+  "tip": "The goal here is to get faster. Do not treat this like conditioning. Take the rest periods noted, and more if you need it. If you cannot run each rep at 100%, we won't get anything out of it."
+ },
+ "bodyPrep": [
+  "Foam roller: quads, hamstrings, groin / inner thigh, IT band, T-spine",
+  "Lacrosse ball: bottom of feet / arches, calves, outer glute, hip flexors, shoulder / posterior cuff, pec major / minor"
+ ],
+ "stretches": [
+  "Knee hug hamstring kicks",
+  "Elevated pigeon",
+  "Couch stretch",
+  "Floor squeezes",
+  "Doorway pec",
+  "Banded lat",
+  "Dead hang"
+ ],
+ "mobilityLink": "https://drive.google.com/file/d/1ZxV9dKp95HM5MjylUau2UI9gqCtBVmYf/view"
+};
+
+// ---------- throwing prep (from the Throwing Prep With Links sheet) ----------
+const PREP={"Green Prep":{"title":"Recovery Day","tissue":[["Lat Foam Roll x 45 Seconds","https://www.youtube.com/watch?v=ht2_L4wGH4w"],["Pec Foam Roll x 45 Seconds","https://www.youtube.com/watch?v=KPxkGGitRaY"],["Lax Ball Posterior Cuff x 1 Minute","https://www.youtube.com/watch?v=-x4oiFrXa54"],["T-Spine Extensions x 10","https://www.youtube.com/watch?v=L2AHCSbJPjQ"]],"mob":[["Bench T-Spine Stretch x 10","https://www.youtube.com/watch?v=sDQmwdOiOVM"],["Cross Body Stretch x 30 Seconds","https://www.youtube.com/watch?v=veZWtNGOxhE"],["Open Books x 8/Side","https://www.youtube.com/shorts/rIU8DST-cZ0"],["90/90 Hip Rotations x 10/Side","https://www.youtube.com/watch?v=f_7qIPxw6nE"],["Shoulder CARs x 5","https://www.youtube.com/watch?v=9FFiaMIkcNY"]],"act":[["No Moneys 2x15","https://www.youtube.com/watch?v=GdxjfB8QQE8"],["Band Pull Aparts 2x20","https://www.youtube.com/watch?v=3OYSIWaJJk4"],["Serratus Wall Slides 2x10","https://www.youtube.com/watch?v=WIdjSjzNS2A"],["Scap Pushups 2x10","https://www.youtube.com/watch?v=NKekqeudgWs"]],"catch":[["60-90 Feet, 8-10 Minutes"],["Loose Arm, Rhythym, Easy Arc, Quality Movement"]],"post":[["Side Lying External Rotation 2x12","https://www.youtube.com/watch?v=v5bPOsQbq7g"],["Scaption Raise (3-5 lb) 2x10","https://www.youtube.com/watch?v=N3P7rp7bCYc"],["Band Pull Apart 2x15","https://www.youtube.com/watch?v=3OYSIWaJJk4"],["DB Serratus Punch 2x12","https://www.youtube.com/watch?v=y1FPkIS85kY"],["Bottoms Up KB Carry 2x20 yd","https://www.youtube.com/watch?v=rLNiGlKxzKk"],["Hammer Pronation/Supination  2x10","https://www.youtube.com/watch?v=-LfyhlA9UNM"],["Shoulder CARs x 5/side","https://www.youtube.com/watch?v=9FFiaMIkcNY"],["Open Books x 8/side","https://www.youtube.com/shorts/rIU8DST-cZ0"],["Dead Hang 2x30 sec"]]},"Yellow Prep":{"title":"Moderate Day","tissue":[["T-Spine Foam Roll x 45 Seconds","https://www.youtube.com/watch?v=cqd2USvPuCA"],["Lat Foam Roll x 45 Seconds","https://www.youtube.com/watch?v=ht2_L4wGH4w"],["Lax Ball Pec Minor x 1 Minute","https://www.youtube.com/shorts/1rHiAMy6Jxg"],["Lax Ball Trap x 1 Minute","https://www.youtube.com/watch?v=P1mPg0A51qE"]],"mob":[["Open Books x 8/Side","https://www.youtube.com/shorts/rIU8DST-cZ0"],["90/90 Hip Switches w/ Reach x 6/Side","https://www.youtube.com/watch?v=tNH3r-YFnYE"],["Shoulder CARs x 5","https://www.youtube.com/watch?v=9FFiaMIkcNY"],["Spiderman Lunge w/ Rotation x 5/Side","https://www.youtube.com/watch?v=qCDFp8cPrqw"],["Wall Slide w/ Lift Off 2x8","https://www.youtube.com/watch?v=k_zZ6XB9jds"]],"act":[["Banded ER 2x12","https://www.youtube.com/watch?v=ybNV36DoRfY"],["Banded IR 2x12","https://www.youtube.com/watch?v=ZXncuZKonas"],["Face Pull 2x12","https://www.youtube.com/watch?v=AlTGQrDOd98"],["Pushup Plus 2x10","https://www.youtube.com/watch?v=RR5xJ1mXEV4"],["Incline Y Raise 2x8","https://www.youtube.com/watch?v=gDHQX1iend4"]],"catch":[["60-150 Feet, 12-15 Minutes, Spin At 60 Feet"],["Comfortable Distance, Moderate Intent, Slope If Needed"]],"post":[["Chest Supported DB Row 2x10","https://www.youtube.com/watch?v=9zkP4Cd_cz0"],["Thumbless Farmer Carry 2x40ft","https://www.youtube.com/watch?v=7mzKcADa46c"],["Unweighted Prone T Raise w/ 2 sec Hold 2x10","https://www.youtube.com/watch?v=3GJoiYUYwr0"],["6 Way Forearms 2x10","https://www.youtube.com/watch?v=A9Hx9f1LFm4"],["Incline IYT 5LB 2x10/Drill","https://www.youtube.com/watch?v=OQmt7pAMtTQ"],["Bear Crawl Forwards 3x30 Feet"],["Bear Crawl Backwards 3x30 Feet"],["Scaption Raise 2x10","https://www.youtube.com/watch?v=N3P7rp7bCYc"]]},"Orange Prep":{"title":"High Day","tissue":[["Lat Foam Roll x 45 Seconds","https://www.youtube.com/watch?v=ht2_L4wGH4w"],["Hamstring Foam Roll x 1 Minute","http://youtube.com/watch?v=BEpW6od6UBM&vl=en"],["Glute Foam Roll x 1 Minute","https://www.youtube.com/watch?v=hte5i_qa6UY"],["Calf Foam Roll x 1 Minute","https://www.youtube.com/watch?v=6JEQSXt4y1o"],["Lax Ball Posterior Cuff x 1 Minute","https://www.youtube.com/watch?v=-x4oiFrXa54"],["Lax Ball Scap x 1 Minute","https://www.youtube.com/watch?v=4-BijFQb4_I"],["Lax Ball Feet x 30 Seconds","https://www.youtube.com/watch?v=hfYw8VUNMIE"]],"mob":[["Bench T-Spine Extension 2x8","https://www.youtube.com/watch?v=sDQmwdOiOVM"],["Half Kneeling Windmill 2x5/side","https://www.youtube.com/watch?v=uJvyRwHdFsg"],["Standing Wall Slide with Lift Off 2x8","https://www.youtube.com/watch?v=k_zZ6XB9jds"],["Hip Airplane 2x5/side","https://www.youtube.com/shorts/uEqg50HSqMk"]],"act":[["Serratus Wall Slide x8","https://www.youtube.com/watch?v=WIdjSjzNS2A"],["Push Up Plus x8","https://www.youtube.com/watch?v=RR5xJ1mXEV4"],["90/90 Hip Rotations x10/Side","https://www.youtube.com/watch?v=f_7qIPxw6nE"],["Rhythmic Stabilization (plyo ball or band perturbations) 2x15 sec","https://www.youtube.com/watch?v=UwIQ3MiBh1E"],["Banded ER x10","https://www.youtube.com/watch?v=ybNV36DoRfY"]],"catch":[["Long Toss At High Intent 15-20 Minutes"],["Pulldowns Every 10-15 Feet Walking In, Spin At 60 If Needed"],["Bullpen Days - Lighter Plyo, Shorter Distance Long Toss"]],"post":[["Side Lying External Rotation 3x15","https://www.youtube.com/watch?v=v5bPOsQbq7g"],["Chest Supported Row 2x8","https://www.youtube.com/watch?v=9zkP4Cd_cz0"],["Thumbless Farmer Carry 4x40ft","https://www.youtube.com/watch?v=7mzKcADa46c"],["6 Way Forearms 3x10","https://www.youtube.com/watch?v=A9Hx9f1LFm4"],["Serratus Dumbell Punch 2x12","https://www.youtube.com/watch?v=y1FPkIS85kY"],["Half Kneeling Cable ER 2x10","https://www.youtube.com/watch?v=eM0V87yceog"]]},"Red Prep":{"title":"Live Day","tissue":[["Personal Choice Foam Roll x 5 Minutes"],["Personal Choice Lax Ball x 5 Minutes"]],"mob":[["Bench T-Spine Extension x 8","https://www.youtube.com/watch?v=sDQmwdOiOVM"],["Standing T-Spine Rotation x 6/side","https://www.youtube.com/watch?v=PWmNVcs8rJY"],["Hip Airplane x 4/side","https://www.youtube.com/shorts/uEqg50HSqMk"],["Wall Slide x 8","https://www.youtube.com/shorts/i_0zLUcE-zk"],["Band Assisted Lat Reach x 5 breaths","https://www.youtube.com/watch?v=e8MCkqSb9yY"],["Personal Choice x 5 Minutes"]],"act":[["Serratus Wall Slide x 8","https://www.youtube.com/watch?v=WIdjSjzNS2A"],["Band ER x 8","https://www.youtube.com/watch?v=ybNV36DoRfY"],["Push Up Plus x 8","https://www.youtube.com/watch?v=RR5xJ1mXEV4"],["90/90 Hip Rotations x 10/side","https://www.youtube.com/watch?v=f_7qIPxw6nE"],["GAME"],["COMPETE"]],"catch":[["GAME DAY. COMPETE."]],"post":[["Shoulder CARs x 3 each direction","https://www.youtube.com/watch?v=9FFiaMIkcNY"],["Quadruped T-Spine Rotation x 6/side","https://www.youtube.com/watch?v=z2zv526I7M8"],["Bear Crawl Forward 2 x 30 Feet"],["Bear Crawl Backwards 2 x 30 Feet"],["Dead Bug with Reach x 8/side","https://www.youtube.com/watch?v=4h1jf1rUdGk"],["Wall Slide x 8","https://www.youtube.com/watch?v=k_zZ6XB9jds"]]}};
+const PREPKEY={Recovery:"Green Prep",Moderate:"Yellow Prep",High:"Orange Prep",Live:"Red Prep"};
+function prepFor(th){const c=thColor(th);return c&&PREPKEY[c[2]]?PREP[PREPKEY[c[2]]]:null}
+function prepList(items){return `<ul class="l">${items.map(([t,u])=>`<li>${u&&/^https:\/\//.test(u)?`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)} ▶</a>`:esc(t)}</li>`).join("")}</ul>`}
+function setX(k,patch){const cur=(ents()[k]||{}).x||{};setEntry(k,{x:{...cur,...patch}})}
+function prepTab(kind,k,p,e){
+ const pr=p.thOff?null:prepFor(p.th),c=thColor(p.th);
+ if(!pr)return `<div class="card"><div class="big off">${p.thOff?"Off day":"No prep plan for this day"}</div><div class="mut">${p.thOff?"No throwing prep today. Rest the arm.":"Your throwing plan has no color yet."}</div></div>`;
+ const f={tissue:"tp",act:"ma",post:"pt"}[kind],x=e.x||{};
+ let h=`<div class="card"><div class="mut">${esc(pr.title)} · ${kind==="tissue"?"Tissue prep":kind==="act"?"Mobility activation":"Post throw"}</div><div class="big" style="background:${c[0]};color:${c[1]};padding:10px 12px;border-radius:12px">${esc(c[2])} day</div>`;
+ if(kind==="tissue")h+=prepList(pr.tissue);
+ else if(kind==="act")h+=`<div class="mut" style="margin-top:8px;font-weight:700">MOBILITY</div>${prepList(pr.mob)}<div class="mut" style="margin-top:8px;font-weight:700">ACTIVATION</div>${prepList(pr.act)}`;
+ else h+=prepList(pr.post);
+ h+=`<div class="mut">Tap a name to watch the video.</div><label class="chk"><input type="checkbox" data-act="xchk" data-f="${f}" data-k="${k}" ${x[f]?"checked":""}>${kind==="tissue"?"Tissue prep":kind==="act"?"Mobility activation":"Post throw"} done</label></div>`;
+ return h}
+const HTHROW=["Light catch","Long toss","Pulldowns","Moderate catch play","Positional throwing"];
+function hthrowTab(k,p,e){const x=e.x||{},ht=x.ht||{},ty=ht.types||[];
+ return `<div class="card"><div class="mut">Throwing · ${myRole()==="TW"?"two-way":"hitter"}</div><div class="big">What did you do today?</div><div class="mut">Tap everything you did.</div>
+ <div class="chips">${HTHROW.map(t=>`<button data-act="htt" data-k="${k}" data-t="${esc(t)}" class="${ty.includes(t)?"on":""}">${esc(t)}</button>`).join("")}</div>
+ <textarea data-act="htnote" data-k="${k}" placeholder="Notes: how the arm felt, what you worked on">${esc(ht.note||"")}</textarea>
+ <div class="mut">${ty.length?"✅ Throwing logged: "+ty.map(esc).join(", "):"Pick at least one to log your throwing."}</div></div>`}
+function setHT(k,patch){const cur=((ents()[k]||{}).x||{}).ht||{};const ht={...cur,...patch};setEntry(k,{x:{...((ents()[k]||{}).x||{}),ht},throwDone:(ht.types||[]).length>0})}
+// ---------- lift cycles (program.cycles; a new one every 4 weeks) ----------
+const CYCLE1="2026-11-09";
+const CATDEF={d1a1:"squat",d2a1:"bench",d3a1:"dead"};
+function normProg(p){if(!p)return p;if(!p.cycles||!p.cycles.length)p={...p,cycles:[{name:p.name||"Cycle 1",start:CYCLE1,dayMap:p.dayMap,days:p.days,note:p.note}]};return p}
+function cycleAt(k){const cs=(program&&program.cycles)||[];let c=cs[0];for(const x of cs)if((x.start||CYCLE1)<=k&&(x.start||CYCLE1)>=((c&&c.start)||CYCLE1))c=x;return c}
+function cycleWeek(k,c){const d=Math.floor((new Date(k+"T12:00:00")-new Date((c.start||CYCLE1)+"T12:00:00"))/86400000);return(((Math.floor(d/7))%4)+4)%4}
+function allLifts(){const seen={},o=[];const cs=((program&&program.cycles)||[]).slice().sort((a,b)=>(b.start||"")<(a.start||"")?-1:1);for(const c of cs)for(const d of c.days||[])for(const x of d.lifts)if(!seen[x.id]){seen[x.id]=1;o.push(x)}return o}
+function catOf(id){const x=allLifts().find(y=>y.id===id);return(x&&x.cat)||CATDEF[id]||""}
+function bestCat(L,cat){let b=0;for(const id of Object.keys(L||{}))if(catOf(id)===cat)b=Math.max(b,+L[id]||0);return b}
+// ---------- plan ----------
+function planFor(k){const w=weekOf(k);if(w<0||w>12)return null;const i=dIdx(k);
+ const lift=liftFor(w,i),th=thFor(me.playerId,w,i);
+ return{w,i,lift,th,phase:PHASE[w],block:w<8?w+1:null,isLift:/^LIFT DAY/.test(lift),isSprint:/SPRINT/.test(lift),thOff:/^OFF|^NEW SHEET|WESLEYAN/.test(th)}}
+// ---------- stats ----------
+const topOf=v=>Array.isArray(v)?Math.max(0,...v.map(x=>+x||0)):(+v||0);
+function setsFor(x,bw){const s=String(x.sets||"");const segs=s.split(",");let n=null;for(const g of segs){const a=g.match(/(\d+)\s*sets?\s*(?:wk|week)?\s*(\d)?(?:\s*-\s*(\d))?/i);if(!a)continue;if(!a[2]){n=n??+a[1];continue}const lo=+a[2]-1,hi=a[3]?+a[3]-1:lo;if(bw>=lo&&bw<=hi)n=+a[1]}return n||(s.match(/\d+/)?+s.match(/\d+/)[0]:3)}
+function stats(E,W,mxv){E=E||ents();W=W||(me&&me.weights)||{};mxv=mxv==null?(+maxOf()||0):mxv;const ks=Object.keys(E).filter(k=>E[k].r).sort();const set=new Set(ks);
+ let best=0,run=0,prev=null;for(const k of ks){run=prev&&addDays(prev,1)===k?run+1:1;best=Math.max(best,run);prev=k}
+ let streak=0,c=todayKey();if(!set.has(c))c=addDays(c,-1);while(set.has(c)){streak++;c=addDays(c,-1)}
+ const cnt=f=>Object.keys(E).filter(k=>E[k][f]).length;
+ const weeks={};ks.forEach(k=>{const m=monOf(k);weeks[m]=(weeks[m]||0)+1});const perfect=Object.values(weeks).some(n=>n>=7);
+ let prs=0;const mx={};for(const k of Object.keys(E).sort()){const L=E[k].lifts||{};for(const[id,v]of Object.entries(L)){const n=topOf(v);if(!n)continue;if(mx[id]!=null&&n>mx[id])prs++;mx[id]=Math.max(mx[id]||0,n)}}
+ const wl={};let hitMin=0,hitSess=0,hi=0,full=0,sore=0,notes=0,velo=0,hitWk={};
+ for(const k of Object.keys(E)){const e=E[k];if(e.liftDone){const w=monOf(k);wl[w]=(wl[w]||0)+1}if(e.r&&+e.r>=9)hi++;if(e.liftDone&&e.mobDone&&(e.sprintDone||e.throwDone))full++;if(e.sore&&Object.keys(e.sore).length)sore++;if(e.note)notes++;if(mxv&&e.mph&&+e.mph>=mxv)velo++;const h=e.hit;if(h&&+h.min>0){hitMin+=+h.min;hitSess++;const w=monOf(k);hitWk[w]=(hitWk[w]||0)+(+h.min)}}
+ const perfectWeeks=Object.values(weeks).filter(n=>n>=7).length,liftWeeks=Object.values(wl).filter(n=>n>=3).length,bigHitWk=Math.max(0,...Object.values(hitWk));
+ return{perfectWeeks,liftWeeks,hitMin,hitSess,hi,full,sore,notes,velo,bigHitWk,total:ks.length,best,streak,lifts:cnt("liftDone"),sprints:cnt("sprintDone"),throws:cnt("throwDone"),mobs:cnt("mobDone"),perfect,prs,maxLift:mx,weighIns:Object.keys(W).length}}
+const BADGES=[
+["🎯","First check-in","Log your readiness once",s=>s.total>=1],
+["📋","10 check-ins","Check in 10 days",s=>s.total>=10],
+["🗓️","25 check-ins","Check in 25 days",s=>s.total>=25],
+["💯","50 check-ins","Check in 50 days",s=>s.total>=50],
+["🔥","3-day streak","3 days in a row",s=>s.best>=3],
+["📅","7-day streak","7 days in a row",s=>s.best>=7],
+["💪","14-day streak","14 days in a row",s=>s.best>=14],
+["🏆","30-day streak","30 days in a row",s=>s.best>=30],
+["👑","60-day streak","60 days in a row",s=>s.best>=60],
+["⭐","Perfect week","Check in all 7 days of a week",s=>s.perfectWeeks>=1],
+["🌟","Perfect month","4 perfect weeks",s=>s.perfectWeeks>=4],
+["🏋️","5 lifts","Finish 5 lift days",s=>s.lifts>=5],
+["🦾","15 lifts","Finish 15 lift days",s=>s.lifts>=15],
+["🏗️","Iron Saint","Finish all 3 lifts in a week",s=>s.liftWeeks>=1],
+["🧱","Iron month","3-lift weeks, 4 times",s=>s.liftWeeks>=4],
+["⚡","5 sprint days","Finish 5 sprint days",s=>s.sprints>=5],
+["🏃","15 sprint days","Finish 15 sprint days",s=>s.sprints>=15],
+["⚾","10 throwing days","Finish 10 throwing days",s=>s.throws>=10],
+["🎯","25 throwing days","Finish 25 throwing days",s=>s.throws>=25],
+["🧘","10 mobility days","Finish 10 mobility days",s=>s.mobs>=10],
+["🌀","30 mobility days","Finish 30 mobility days",s=>s.mobs>=30],
+["🧩","Full house","Lift + mobility + sprint or throw in one day",s=>s.full>=1],
+["🔋","Locked in","Readiness of 9 or 10 on 5 days",s=>s.hi>=5],
+["🚀","Velo day","Hit or beat your fall max",s=>s.velo>=1],
+["⚖️","First weigh-in","Log your body weight",s=>s.weighIns>=1],
+["📊","Weight watcher","10 weigh-ins",s=>s.weighIns>=10],
+["📈","First PR","Beat a previous lift max",s=>s.prs>=1],
+["🚀","5 PRs","Set 5 PRs",s=>s.prs>=5],
+["💎","10 PRs","Set 10 PRs",s=>s.prs>=10],
+["🏅","20 PRs","Set 20 PRs",s=>s.prs>=20],
+["🩹","Body aware","Log your soreness map 3 times",s=>s.sore>=3],
+["📝","Talker","Leave a note on 5 days",s=>s.notes>=5],
+["🏏","First cage session","Log your first hit",s=>s.hitSess>=1],
+["🔨","10 cage sessions","Log 10 hitting sessions",s=>s.hitSess>=10],
+["⏱️","5 cage hours","300 minutes hitting",s=>s.hitMin>=300],
+["🏟️","10 cage hours","600 minutes hitting",s=>s.hitMin>=600],
+["💥","Big week","Hit 3 hours in one week",s=>s.bigHitWk>=180]];
+// ---------- fun ----------
+const CHEER=["Checked in. That's the standard. 🔥","You showed up. That's the whole game. 💪","Bare minimum cleared. Champions start here. ⚡","Logged. Coach sees you. 👀","Boom. Another day banked. Saints don't skip. 🏆"];
+function msgFor(r,streak){let m=CHEER[Math.floor(Math.random()*CHEER.length)];
+ if([3,7,14,21,30,50,75,100].includes(streak))m=`${streak}-day streak! Locked in. 🔥🔥🔥`;
+ else if(streak===1)m="Day 1 in the books. Start the streak. 🚀";
+ let x=r>=8?"Feeling great, let's use it.":r>=5?"Honest number, solid.":"Thanks for being straight. Coach will adjust.";
+ return m+" "+x}
+function celebrate(text){const t=$("toast");t.textContent=text;t.classList.add("on");clearTimeout(celebrate.t);celebrate.t=setTimeout(()=>t.classList.remove("on"),4200);
+ try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}
+ if(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches)return;confetti()}
+function confetti(){const c=$("fx"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const cols=["#2f64e0","#0b2a6f","#9aa3b2","#c9cfda","#8fb0ff","#2f64e0"];
+ const ps=Array.from({length:90},()=>({x:innerWidth/2,y:innerHeight*0.35,vx:(Math.random()-.5)*14,vy:-Math.random()*13-3,s:5+Math.random()*6,c:cols[Math.floor(Math.random()*cols.length)],r:Math.random()*6}));
+ let f=0;(function tick(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.45;p.r+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore()});if(++f<90)requestAnimationFrame(tick);else x.clearRect(0,0,c.width,c.height)})()}
+// ---------- views ----------
+function exName(id){const x=allLifts().find(y=>y.id===id);return x?x.name:String(id).replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
+function prevMax(id,k){const E=ents();let mx=0;for(const d of Object.keys(E))if(d<k&&E[d].lifts)mx=Math.max(mx,topOf(E[d].lifts[id]));return mx}
+function lastW(id,k){const E=ents();const ks=Object.keys(E).filter(d=>d<k&&E[d].lifts&&topOf(E[d].lifts[id])).sort();return ks.length?topOf(E[ks[ks.length-1]].lifts[id]):null}
+function chips(k,e,cls){return `<div class="scale">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<label><input type="radio" name="r${k}" data-act="r" data-k="${k}" value="${n}" ${+e.r===n?"checked":""}><span>${n}</span></label>`).join("")}</div>`}
+function strip(){const m=monOf(sel),tk=todayKey(),E=ents();
+ let h=`<div class="strip"><button class="arr" data-act="wk" data-n="-7" aria-label="Previous week">‹</button>`;
+ for(let i=0;i<7;i++){const k=addDays(m,i),d=new Date(k+"T12:00");h+=`<button class="d${k===sel?" on":""}${k===tk?" td":""}" data-act="day" data-k="${k}">${DN[i]}<b>${d.getDate()}</b><span class="dot">${E[k]&&E[k].r?"✅":""}</span>${(()=>{const pl=hasThrow(me.playerId)?planFor(k):null,c=pl&&thColor(pl.th);return c?`<i class="cb" style="background:${c[0]}"></i>`:""})()}</button>`}
+ return h+`<button class="arr" data-act="wk" data-n="7" aria-label="Next week">›</button></div>`}
+function throwTab(k,p,e){
+ const max=maxOf(),cap=capFor(max,p.th),over=cap!=null&&e.mph&&+e.mph>cap;
+ let h=`<div class="card"><div class="mut">Throwing · your personal plan</div>${(()=>{const c=thColor(p.th);return `<div class="big${p.thOff?" off":""}"${c?` style="background:${c[0]};color:${c[1]};padding:12px;border-radius:12px"`:""}>${esc(p.th||"No group set")}</div>`})()}`;
+ if(!p.thOff){h+=`<div class="line"><label>Top MPH <input type="number" step="0.1" min="40" max="110" data-act="mph" data-k="${k}" value="${esc(e.mph??"")}"></label>${cap!=null?`<span class="cap${over?" over":""}">Cap ${cap} mph${over?" · OVER, shut it down":""}</span>`:(/LONG TOSS, 100/.test(p.th)?'<span class="cap">NO CAP</span>':(max?"":'<span class="cap">Add fall max in Me for caps</span>'))}</div>
+ <label class="chk"><input type="checkbox" data-act="chk" data-f="throwDone" data-k="${k}" ${e.throwDone?"checked":""}>Throwing done</label>`}
+ else h+=`<div class="mut">Rest the arm. Hydrate, sleep, eat.</div>`;
+ {const pr=p.thOff?null:prepFor(p.th);if(pr&&pr.catch&&pr.catch.length)h+=`<div class="msg" style="margin-top:10px"><b>Catch play · ${esc(pr.title)}</b><br>${pr.catch.map(x=>esc(x[0])).join("<br>")}</div>`}
+ return h+`<textarea data-act="note" data-k="${k}" placeholder="Notes: arm feel, what changed">${esc(e.note||"")}</textarea></div>`}
+function liftTab(k,p,e){
+ if(!p.isLift)return `<div class="card"><div class="big off">No lift today</div><div class="mut">${esc(p.lift)}. Recovery counts too.</div></div>`;
+ if(!program||!program.days)return `<div class="card"><div class="big">${esc(p.lift)}</div><div class="mut">Lifting program hasn't been loaded yet. Ask Coach.</div></div>`;
+ const cy=cycleAt(k)||program,id=(cy.dayMap||{"0":"d1","2":"d2","3":"d3"})[p.i],day=(cy.days||[]).find(d=>d.id===id);
+ if(!day)return `<div class="card"><div class="big">${esc(p.lift)}</div><div class="mut">No program mapped for this day.</div></div>`;
+ const bw=cycleWeek(k,cy);
+ let h=`<div class="card"><div class="mut">${esc(cy.name||program.name||"Program")} · week ${bw+1} of 4${cy.note?" · "+esc(cy.note):""}</div><div class="big">${esc(day.title)}</div><div class="mut">${esc(p.lift)}</div>`;
+ h+=day.lifts.map(x=>{const reps=Array.isArray(x.reps)?x.reps[bw]??x.reps[x.reps.length-1]:x.reps;const w=(e.lifts||{})[x.id],lw=lastW(x.id,k),pr=(stats().maxLift[x.id]||0);
+  if(x.noWt)return `<div class="ex2"><div class="exh"><span class="cd">${esc(x.code)}</span><div><b>${esc(x.name)}</b><span class="mut">${esc(x.sets||"")} · ${esc(reps)}${x.note?" · "+esc(x.note):""}</span></div></div></div>`;
+  const n=Math.min(8,setsFor(x,bw)),arr=Array.isArray(w)?w:(w?[w]:[]),tp=topOf(w),prev=prevMax(x.id,k);
+  const isPr=tp>0&&prev>0&&tp>prev;
+  return `<div class="ex2"><div class="exh"><span class="cd">${esc(x.code)}</span><div><b>${esc(x.name)}${isPr?'<span class="pr">PR 🏆</span>':""}</b><span class="mut">${esc(x.sets||"")} · ${esc(reps)}${lw?" · last top "+esc(lw)+" lb":""}${prev?" · best "+prev+" lb":""}</span></div></div><div class="sets">${Array.from({length:n},(_,i)=>`<label class="st"><span>Set ${i+1}</span><input type="number" inputmode="decimal" step="2.5" placeholder="lb" data-act="ls" data-k="${k}" data-id="${esc(x.id)}" data-i="${i}" data-n="${n}" value="${esc(arr[i]??"")}" aria-label="${esc(x.name)} set ${i+1} weight"></label>`).join("")}</div></div>`}).join("");
+ h+=`<label class="chk"><input type="checkbox" data-act="chk" data-f="liftDone" data-k="${k}" ${e.liftDone?"checked":""}>Lift done</label></div>`;
+ return h}
+function hitTab(k,p,e){const h0=e.hit||{};const wk=monOf(k);let tot=0;for(let i=0;i<7;i++){const x=ents()[addDays(wk,i)];if(x&&x.hit)tot+=+x.hit.min||0}
+ return `<div class="card"><div class="mut">Hitting · ${myRole()==="TW"?"Two-way player":"Hitter"}</div><div class="big">How long did you hit?</div>
+ <div class="line"><label>Minutes <input type="number" inputmode="numeric" min="0" max="300" step="5" data-act="hmin" data-k="${k}" value="${esc(h0.min??"")}"></label></div>
+ <div class="chips">${[15,30,45,60,90].map(n=>`<button data-act="hchip" data-k="${k}" data-n="${n}" class="${+h0.min===n?"on":""}">${n}</button>`).join("")}</div>
+ <label class="mut">What did you do?<br><select data-act="htype" data-k="${k}"><option value="">Select…</option>${HIT_TYPES.map(t=>`<option ${h0.type===t?"selected":""}>${esc(t)}</option>`).join("")}</select></label>
+ <textarea data-act="hnote" data-k="${k}" placeholder="Notes: what you worked on, how it felt">${esc(h0.note||"")}</textarea>
+ <div class="mut">This week: <b>${tot}</b> min</div></div>${hitStatsCard()}`}
+function hitStatsCard(){const s=myHit(me.playerId);if(!s.sessions)return"";
+ const bars=[];for(let i=5;i>=0;i--){const w=addDays(s.cur,-7*i);bars.push([w,s.wk[w]||0])}const mxm=Math.max(60,...bars.map(x=>x[1]));
+ return `<div class="card"><h3>📊 Your hitting numbers</h3><div class="row"><span>This week</span><b>${s.thisWeek} min</b></div><div class="row"><span>Last week</span><b>${s.last} min</b></div><div class="row"><span>Weekly average</span><b>${s.avg} min</b></div><div class="row"><span>Total / sessions</span><b>${Math.round(s.tot/6)/10} hrs / ${s.sessions} ${s.sessions===1?"session":"sessions"}</b></div>
+ <div style="display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:10px">${bars.map(([w,v])=>`<div style="flex:1;text-align:center;font-size:10px;color:var(--mut)"><div style="height:${Math.max(2,Math.round(60*v/mxm))}px;background:var(--acc);border-radius:4px 4px 0 0;margin-bottom:2px" title="${v} min"></div>${w.slice(5)}</div>`).join("")}</div><div class="mut" style="font-size:12px">Bars: minutes per week, last 6 weeks. The average counts completed weeks, missed weeks as zero.</div></div>`}
+function sprintTab(k,p,e){
+ if(!p.isSprint)return `<div class="card"><div class="big off">No sprint work today</div><div class="mut">Sprint days: Tuesday and Saturday.</div></div>`;
+ const s=program&&program.speed;
+ let h=`<div class="card"><div class="mut">${esc(p.lift)}</div><div class="big">Speed day</div>`;
+ if(s){h+=`<ul class="l">${s.drills.map(x=>`<li><b>${esc(x.name)}</b>${x.note?` <span class="mut">· ${esc(x.note)}</span>`:""}</li>`).join("")}</ul>${s.tip?`<div class="msg">${esc(s.tip)}</div>`:""}`}
+ else h+=`<div class="mut">Speed work hasn't been loaded yet. Ask Coach.</div>`;
+ h+=`<label class="chk"><input type="checkbox" data-act="chk" data-f="sprintDone" data-k="${k}" ${e.sprintDone?"checked":""}>Sprint work done</label></div>`;
+ return h}
+function mobTab(k,p,e){
+ let h=`<div class="card"><div class="mut">Mobility</div><div class="big">${p.block?"Mobility Guide · Block "+p.block:"Back to campus · team mobility"}</div>`;
+ h+=`<label class="chk"><input type="checkbox" data-act="chk" data-f="mobDone" data-k="${k}" ${e.mobDone?"checked":""}>Mobility done</label>`;
+ if(program&&program.mobilityLink&&/^https:\/\//.test(program.mobilityLink))h+=`<div class="line"><a href="${esc(program.mobilityLink)}" target="_blank" rel="noopener"><button class="p">Open the Mobility Guide</button></a></div><div class="mut">Do the movements listed for Block ${p.block||"—"}.</div>`;
+ h+=`</div>`;
+ if(program&&program.bodyPrep)h+=`<details class="card"><summary>Body prep / soft tissue</summary><ul class="l">${program.bodyPrep.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`;
+ if(program&&program.stretches)h+=`<details class="card"><summary>Stretches</summary><ul class="l">${program.stretches.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`;
+ return h}
+function todayView(){
+ const k=sel,p=planFor(k),e=ents()[k]||{};
+ let h=strip();
+ const g=groupOf();
+ h+=`<div class="card hero"><div class="mut">${longDate(k)}${k===todayKey()?" · TODAY":""}</div>`;
+ h+=p?`<div class="mut">${esc(p.phase)}${p.block?" · Mobility block "+p.block:""}</div>`:`<div class="mut">Outside the ramp (Nov 16 – Feb 14)</div>`;
+ h+=`<h3 style="margin-top:8px">${e.r?"✅ Checked in · readiness "+e.r:"Daily check-in"}</h3><div class="mut">${e.r?"Tap a number to change it.":"How ready do you feel today? 1 = wrecked, 10 = fresh. This is the one thing we ask every day."}</div>${chips(k,e)}</div>`;
+ h+=soreMap(k,e);
+ if(k===todayKey())h=pinnedBar()+(new Date().getDay()===1?shoutCard(false):"")+h;
+ if(!p)return h+`<div class="msg">No plan scheduled for this date.</div>`;
+ const done={throw:e.throwDone,lift:e.liftDone,sprint:e.sprintDone,mob:e.mobDone};
+ const tabs=[];if(showThrow())tabs.push(["throw","⚾ Throw"],["tissue","🧴 Tissue Prep"],["act","🔄 Mobility Activation"],["post","✅ Post Throw"]);else tabs.push(["hthrow","⚾ Throw"]);if(showHit())tabs.push(["hit","🏏 Hit"]);tabs.push(["lift","🏋️ Lift"],["sprint","⚡ Sprint"],["mob","🧘 Mobility"]);
+ if(!tabs.some(x=>x[0]===sub))sub=tabs[0][0];done.hit=e.hit&&+e.hit.min>0;done.hthrow=e.throwDone;{const xx=e.x||{};done.tissue=xx.tp;done.act=xx.ma;done.post=xx.pt}
+ h+=`<div class="subs sc">${tabs.map(([c,l])=>`<button class="${sub===c?"on":""}" data-act="sub" data-s="${c}">${l}${done[c]?'<span class="ck">✅</span>':""}</button>`).join("")}</div>`;
+ h+=sub==="throw"?throwTab(k,p,e):sub==="tissue"||sub==="act"||sub==="post"?prepTab(sub,k,p,e):sub==="hthrow"?hthrowTab(k,p,e):sub==="hit"?hitTab(k,p,e):sub==="lift"?liftTab(k,p,e):sub==="sprint"?sprintTab(k,p,e):mobTab(k,p,e);
+ return h+(k===todayKey()?goalCard(false):"")+`<div class="save">${esc(status)}</div>`}
+function schedView(){
+ const tk=todayKey(),E=ents(),g=hasThrow(me.playerId);let h=`<p class="mut">Your 13-week ramp. Tap any day to open it. Colors show throwing intensity. ✅ = checked in.</p>${g?legend():""}`;
+ for(let w=0;w<13;w++){const s=key(dayDate(w,0));
+  h+=`<div class="card"><h3>Week ${w+1} · ${MON[dayDate(w,0).getMonth()]} ${dayDate(w,0).getDate()}</h3><div class="mut">${esc(PHASE[w])}${w<8?" · Mobility block "+(w+1):""}</div><div class="wk">`;
+  for(let i=0;i<7;i++){const k=key(dayDate(w,i)),p=planFor(k)||{},th=(p.th||"");
+   const c=g?thColor(th):null;
+   const tt=!g?"":p.thOff?"Off":c?c[2]:th?"Throw":"";
+   h+=`<button class="${k===tk?"td ":""}${E[k]&&E[k].r?"ci":""}" data-act="open" data-k="${k}"${c?` style="background:${c[0]};color:${c[1]};border-color:${c[0]}"`:""}>${DN[i]}<b>${dayDate(w,i).getDate()}</b><span class="tg">${tt}</span><span class="tg2">${p.isLift?"LIFT":""}${p.isSprint?"SPRINT":""}</span><span>${E[k]&&E[k].r?"✅":""}</span></button>`}
+  h+=`</div></div>`}
+ return h}
+function chart(pts,lo,hi,goal){const w=340,h=170,L=40,R=12,T=14,B=26,n=pts.length;
+ if(goal){lo=Math.min(lo,Math.floor(goal)-1);hi=Math.max(hi,Math.ceil(goal)+1)}
+ const X=i=>n===1?(L+(w-L-R)/2):L+i*(w-L-R)/(n-1),Y=v=>T+(hi-v)/((hi-lo)||1)*(h-T-B);
+ let s=`<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Body weight over time">`;
+ for(let g=0;g<=3;g++){const v=lo+(hi-lo)*g/3,y=Y(v);s+=`<line x1="${L}" x2="${w-R}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${L-4}" y="${y+3}" text-anchor="end" font-size="9" fill="var(--mut)">${Math.round(v*10)/10}</text>`}
+ if(goal)s+=`<line x1="${L}" x2="${w-R}" y1="${Y(goal)}" y2="${Y(goal)}" stroke="var(--ok)" stroke-dasharray="5 4" stroke-width="1.5"/><text x="${w-R}" y="${Y(goal)-3}" text-anchor="end" font-size="9" fill="var(--ok)">goal ${goal}</text>`;
+ const xy=pts.map((p,i)=>[X(i),Y(p[1])]);
+ if(n>1)s+=`<polyline fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linejoin="round" points="${xy.map(p=>p.join(",")).join(" ")}"/>`;
+ const step=Math.max(1,Math.ceil(n/6));
+ pts.forEach((p,i)=>{s+=`<circle cx="${xy[i][0]}" cy="${xy[i][1]}" r="4" fill="var(--acc)" stroke="var(--card)" stroke-width="1.5"/>`;
+  if(n<=12||i%step===0||i===n-1)s+=`<text x="${xy[i][0]}" y="${xy[i][1]-8}" text-anchor="middle" font-size="9" font-weight="700" fill="var(--ink)">${p[1]}</text>`;
+  if(i%step===0||i===n-1)s+=`<text x="${xy[i][0]}" y="${h-8}" text-anchor="middle" font-size="9" fill="var(--mut)">${p[0].slice(5).replace("-","/")}</text>`});
+ return s+`</svg>`}
+function weightView(){
+ const W=me.weights||{},ks=Object.keys(W).sort(),vals=ks.map(k=>+W[k]);
+ let h=`<div class="card"><h3>Body weight</h3><div class="line"><input type="date" id="wd" value="${todayKey()}"><input type="number" step="0.1" id="wv" placeholder="lb" inputmode="decimal"><button class="p" data-act="wlog">Log it</button></div>`;
+ if(vals.length){const cur=vals[vals.length-1],first=vals[0],last7=vals.slice(-7),avg=(last7.reduce((a,b)=>a+b,0)/last7.length).toFixed(1);
+  h+=`<div class="row"><span>Current</span><b>${cur} lb</b></div>`+(vals.length>1?`<div class="row"><span>Change since first</span><b>${(cur-first>0?"+":"")+(cur-first).toFixed(1)} lb</b></div><div class="row"><span>Last ${last7.length} avg</span><b>${avg} lb</b></div>`:"");
+  if(me.goalWeight)h+=`<div class="row"><span>To goal (${esc(me.goalWeight)})</span><b>${(me.goalWeight-cur>0?"+":"")+(me.goalWeight-cur).toFixed(1)} lb</b></div>`;
+  const rec=ks.slice(-40).map(k=>[k,+W[k]]);h+=`<div class="mut" style="margin-top:8px">Every weigh-in you log is a point on the line.</div>`+chart(rec,Math.floor(Math.min(...rec.map(x=>x[1]))-1),Math.ceil(Math.max(...rec.map(x=>x[1]))+1),+me.goalWeight||0)}
+ h+=`<div class="line"><label>Goal weight <input type="number" step="0.1" id="gw" value="${me.goalWeight?esc(me.goalWeight):""}" inputmode="decimal"></label><button data-act="gsave">Save goal</button></div></div>`;
+ if(ks.length)h+=`<div class="card"><h3>History</h3>${ks.slice().reverse().slice(0,14).map(k=>`<div class="row"><span>${k.slice(5)}</span><span><b>${esc(W[k])} lb</b> <button data-act="wdel" data-k="${k}" aria-label="Delete ${k}">✕</button></span></div>`).join("")}</div>`;
+ const mx=stats().maxLift,names={};if(program&&program.days)program.days.forEach(d=>d.lifts.forEach(x=>names[x.id]=x.name));
+ const rows=Object.entries(mx).filter(([id])=>names[id]).sort((a,b)=>b[1]-a[1]);
+ h+=`<div class="card"><h3>Lift PRs</h3>${rows.length?rows.map(([id,v])=>`<div class="row"><span>${esc(names[id])}</span><b>${v} lb</b></div>`).join(""):'<div class="mut">Log weights on the Lift tab and your bests show up here.</div>'}</div>`;
+ return h+`<div class="save">${esc(status)}</div>`}
+function thColor(th){const u=String(th||"").toUpperCase();if(!u)return null;
+ if(/^OFF|^NEW SHEET|WESLEYAN/.test(u))return["#4285f4","#fff","Off"];
+ if(/RECOVERY/.test(u))return["#34a853","#fff","Recovery"];
+ if(/LIVE/.test(u))return["#ea4335","#fff","Live"];
+ if(/OVER THE MOUND PEN/.test(u))return/75\s*-\s*80/.test(u)?["#ff6d01","#fff","High"]:["#ff6d01","#fff","High"];
+ if(/^PEN|100% PEN/.test(u))return["#ea4335","#fff","Live"];
+ if(/LONG TOSS/.test(u))return["#ff6d01","#fff","High"];
+ if(/MODERATE/.test(u))return["#fbbc04","#17202b","Moderate"];
+ return null}
+const LEGEND=[["#4285f4","Off"],["#34a853","Recovery"],["#fbbc04","Moderate"],["#ff6d01","High"],["#ea4335","Live"]];
+const legend=()=>`<div class="lg">${LEGEND.map(([c,n])=>`<span><i style="background:${c}"></i>${n}</span>`).join("")}</div>`;
+
+// ---- soreness map (optional) ----
+const SORE=[["lsh","L Shoulder",24,52],["rsh","R Shoulder",96,52],["lel","L Elbow",16,92],["rel","R Elbow",104,92],["ub","Upper back",60,60],["core","Core",60,92],["lb","Lower back",60,116],["lhip","L Hip",44,130],["rhip","R Hip",76,130],["lq","L Quad",46,166],["rq","R Quad",74,166],["lham","L Hamstring",42,192],["rham","R Hamstring",78,192],["lkn","L Knee",46,214],["rkn","R Knee",74,214],["lcf","L Calf",44,244],["rcf","R Calf",76,244]];
+const SORECOL=["transparent","#ffb870","#ff6d01","#c5221f"],SORENAME=["","mild","moderate","sore"];
+function soreMap(k,e){const s=e.sore||{};const act=Object.keys(s).filter(x=>s[x]);
+ const dots=SORE.map(([id,n,x,y])=>`<g data-act="sore" data-k="${k}" data-p="${id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="13" fill="${s[id]?SORECOL[s[id]]:"var(--chip)"}" stroke="${s[id]?"#7a1b00":"var(--line)"}" stroke-width="${s[id]?2:1}" opacity="${s[id]?1:.75}"/><title>${n}</title></g>`).join("");
+ const body=`<svg viewBox="0 0 120 262" width="150" role="img" aria-label="Body map"><circle cx="60" cy="22" r="14" fill="var(--line)"/><rect x="42" y="38" width="36" height="86" rx="14" fill="var(--line)"/><rect x="10" y="44" width="16" height="62" rx="8" fill="var(--line)"/><rect x="94" y="44" width="16" height="62" rx="8" fill="var(--line)"/><rect x="40" y="122" width="16" height="132" rx="8" fill="var(--line)"/><rect x="64" y="122" width="16" height="132" rx="8" fill="var(--line)"/>${dots}</svg>`;
+ return `<details class="card"${act.length?" open":""}><summary>Anything sore? (optional)</summary><div class="mut" style="margin:6px 0">Tap a spot to mark it: once = mild, twice = moderate, three times = sore, again to clear. Skip it if you feel fine.</div><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">${body}<div>${act.length?act.map(id=>`<div>${SORE.find(x=>x[0]===id)[1]}: <b>${SORENAME[s[id]]}</b></div>`).join(""):'<div class="mut">Nothing marked. 👍</div>'}</div></div></details>`}
+// ---- pinned message + team goal ----
+function pinnedBar(){return pinned&&pinned.text?`<div class="msg" style="border-left:4px solid var(--acc)">📌 <b>Coach:</b> ${esc(pinned.text)}</div>`:""}
+function goals(){if(!week)return null;const poss=Math.max(1,week.players*week.daysElapsed);const wprs=prs.filter(r=>r.d>=week.start).length;
+ const ns=Math.max(1,week.players);return[["Check in every day",Math.round(100*week.checkins/poss),97,"%","team check-in rate (97% to hit it)"],["Get the lifts in",week.lifts,Math.round(ns*2.7),"","lift days done (about 3 per player)"],["Sprint work",week.sprints,Math.round(ns*1.8),"","sprint days done (2 per player)"],["Set PRs",wprs,Math.max(8,Math.round(ns*0.35)),"","team PRs this week"]]}
+function goalCard(full){const g=goals();if(!g)return"";const all=g.every(x=>x[1]>=x[2]);
+ let h=`<div class="card"><h3>🎯 Team goal this week${all?" · CRUSHED 🏆":""}</h3>`;
+ h+=g.map(([n,v,t,u,d])=>{const p=Math.min(100,Math.round(100*v/t));return `<div style="margin:8px 0"><div class="row" style="border:0;padding:0"><span>${n}${v>=t?" ✅":""}</span><b>${v}${u} / ${t}${u}</b></div><div style="height:10px;border-radius:6px;background:var(--chip);overflow:hidden"><div style="height:100%;width:${p}%;background:var(--acc)"></div></div>${full?`<div class="mut" style="font-size:12px">${d}</div>`:""}</div>`}).join("");
+ return h+(full?`<div class="mut">Goals reset every Monday. Hit all four and the whole team earns bragging rights.</div>`:"")+`</div>`}
+// ---- pound for pound ----
+const P4P=[["total","Total (squat + bench + deadlift)",["squat","bench","dead"]],["squat","Squat",["squat"]],["bench","Bench press",["bench"]],["dead","Deadlift",["dead"]]];
+let p4sel="total";
+function p4pView(){const cfg=P4P.find(x=>x[0]===p4sel)||P4P[0];
+ let h=`<div class="card"><h3>⚖️ Pound for pound</h3><div class="mut">Weight lifted divided by body weight. Smaller guys can win here. Needs a weigh-in and a logged lift.</div><select data-act="p4sel">${P4P.map(([id,n])=>`<option value="${id}" ${p4sel===id?"selected":""}>${n}</option>`).join("")}</select>`;
+ const rows=board.map(r=>{const parts=cfg[2].map(cat=>bestCat(r.lifts,cat));const ok=r.bw>0&&parts.every(x=>x>0);return{n:r.name,bw:r.bw,sum:parts.reduce((a,b)=>a+b,0),ok,ratio:ok?parts.reduce((a,b)=>a+b,0)/r.bw:0}}).filter(r=>r.ok).sort((a,b)=>b.ratio-a.ratio);
+ h+=rows.length?rows.slice(0,15).map((r,i)=>`<div class="row${i<3?" medal m"+i:""}"><span>${MEDAL[i]||(i+1)+"."} ${esc(r.n)}${me&&r.n===me.name?" (you)":""}</span><b>${r.ratio.toFixed(2)}× <span class="mut">(${r.sum} lb @ ${r.bw})</span></b></div>`).join(""):'<div class="mut" style="margin-top:8px">Nobody qualifies yet. Log a weigh-in on the Weight tab and the lifts in the Lift tab.</div>';
+ return h+`</div>`}
+// ---- lift cycle editor (coach) ----
+let cyDraft=null;
+const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+function liftsToText(lifts){return lifts.map(x=>[x.code||"",x.name,x.sets||"",(Array.isArray(x.reps)?x.reps.join(";"):x.reps)||"",x.note||"",[x.noWt?"nowt":"",x.cat||""].filter(Boolean).join(" ")].join(" | ")).join("\n")}
+function parseLifts(txt,used){return txt.split("\n").map(s=>s.trim()).filter(Boolean).map(line=>{const f=line.split("|").map(x=>x.trim()),name=f[1]||"";if(!name)return null;
+  const old=allLifts().find(y=>y.name.toLowerCase()===name.toLowerCase());let id=old?old.id:slug(name)||("x"+Math.random().toString(36).slice(2,6));while(used.has(id))id+="-b";used.add(id);
+  const reps=(f[3]||"").split(";").map(x=>x.trim());const fl=(f[5]||"").toLowerCase().split(/\s+/);
+  const o={id,code:f[0]||"",name,sets:f[2]||"",reps:reps.length&&reps[0]!==""?reps:["-"]};if(f[4])o.note=f[4];if(fl.includes("nowt"))o.noWt=true;for(const c of["squat","bench","dead"])if(fl.includes(c))o.cat=c;return o}).filter(Boolean)}
+function nextMonday(k){let d=k;for(let i=0;i<7;i++){if(new Date(d+"T12:00:00").getDay()===1)return d;d=addDays(d,1)}return k}
+function cycleEditor(){const cs=(program&&program.cycles)||[];const cur=cycleAt(todayKey())||cs[0];const nextStart=cs.length?nextMonday(addDays((cs.slice().sort((a,b)=>a.start<b.start?1:-1)[0].start||CYCLE1),28)):"";
+ const d=cyDraft||{name:"",start:nextStart,t:["Day 1 · Lower","Day 2 · Upper","Day 3 · Total"],x:["","",""]};
+ let h=`<div class="card"><h3>🏋️ Lift cycles</h3><div class="mut">Lifts change every 4 weeks. Each cycle starts on a Monday. Players automatically see the right cycle for each date, and old weights and PRs are kept.</div>`;
+ h+=cs.slice().sort((a,b)=>(a.start||"")<(b.start||"")?-1:1).map((c,i)=>`<div class="row"><span><b>${esc(c.name||"Cycle")}</b><br><span class="mut">starts ${esc(c.start||CYCLE1)} · ${(c.days||[]).reduce((n,x)=>n+x.lifts.length,0)} exercises</span></span>${cs.length>1&&c!==cs[0]?`<button data-act="cydel" data-i="${cs.indexOf(c)}">Delete</button>`:`<span class="mut">${c===cur?"current":""}</span>`}</div>`).join("")+`</div>`;
+ h+=`<div class="card"><h3>➕ Add the next cycle</h3><div class="mut"><b>Step 1.</b> Tap "Copy current lifts" so you only change what's different.<br><b>Step 2.</b> Edit the lines. One exercise per line, pieces separated by | in this order:<br><code>Code | Exercise | Sets | Reps by week | Note | Tags</code><br>Reps by week use ; between weeks, like <code>5;4;3;3</code>. Tags (optional): <code>nowt</code> = no weight box, <code>squat</code>, <code>bench</code> or <code>dead</code> = counts toward pound for pound.<br><b>Step 3.</b> Pick the start Monday and tap Add cycle.</div>
+ <div class="line"><button data-act="cycopy">Copy current lifts</button></div>
+ <div class="line"><label>Cycle name <input type="text" id="cyn" value="${esc(d.name)}" placeholder="Winter Cycle 2" style="width:200px"></label><label>Starts (Monday) <input type="date" id="cys" value="${esc(d.start)}"></label></div>
+ ${[0,1,2].map(i=>`<div class="mut" style="margin-top:8px"><b>Day ${i+1}</b> (${["Monday","Wednesday","Thursday"][i]})</div><input type="text" id="cyt${i}" value="${esc(d.t[i])}" style="width:100%;margin:4px 0"><textarea id="cyx${i}" style="min-height:150px;font-family:ui-monospace,monospace;font-size:12px" placeholder="A1 | Barbell Back Squat | 4 sets | 5;5;3;3 | | squat">${esc(d.x[i])}</textarea>`).join("")}
+ <div class="line"><button class="p" data-act="cyadd">Add cycle</button></div></div>`;
+ return h}
+function readCy(){return{name:$("cyn").value.trim(),start:$("cys").value,t:[0,1,2].map(i=>$("cyt"+i).value.trim()),x:[0,1,2].map(i=>$("cyx"+i).value)}}
+// ---- weekly shout-outs (auto-generated on the server) ----
+function shoutCard(full){if(!shout||!shout.items||!shout.items.length)return full?`<div class="card"><h3>📣 Shout-outs</h3><div class="mut">Shout-outs for last week show up here every Monday once there's enough activity.</div><div class="mut" style="margin-top:6px">🤖 Auto-generated by the app, not written by Coach.</div></div>`:"";
+ const md=s=>{const d=new Date(s+"T12:00:00");return MON[d.getMonth()]+" "+d.getDate()};
+ return `<div class="card"><h3>📣 Last week's shout-outs</h3><div class="mut">${md(shout.start)} to ${md(shout.end)}</div>${shout.items.map(i=>`<div class="row"><span>${i.icon} <b>${esc(i.title)}</b><br><span class="mut">${esc(i.detail)}</span></span><b style="text-align:right">${esc(i.names)}</b></div>`).join("")}<div class="mut" style="margin-top:8px;font-size:12px">🤖 Auto-generated by the app from last week's logs. Not written by Coach.</div></div>`}
+// ---- teammates roster ----
+let activity=null,actDay=null,actErr="";
+let bdata={};
+async function loadActivity(){try{const r=await call("activity",me?creds():{coachPin});if(!r.activity)throw new Error("old");activity=r.activity;actDay=r.today;actErr="";try{const q=await call("badgesAll",me?creds():{coachPin});bdata={};(q.players||[]).forEach(x=>{bdata[x.id]=stats(x.entries,x.weights,+x.fallMax||0)})}catch(e){}}catch(e){actErr="The Roster needs the newest backend. Coach: paste the latest Code.gs into Apps Script and redeploy as a New version."}if(tab==="roster")paint()}
+function rosterView(){
+ if(actErr)return `<div class="msg">${esc(actErr)}</div>`;
+ if(!activity)return `<div class="card mut">Loading your team…</div>`;
+ const td=actDay||todayKey(),mon=monOf(td),days=[0,1,2,3,4,5,6].map(i=>addDays(mon,i)),L="MTWTFSS";
+ const done=activity.filter(p=>(p.days[td]||"").includes("c")).length;
+ let h=`<div class="card"><h3>👥 Team roster</h3><div class="mut">${done} of ${activity.length} checked in today. This week, Monday to Sunday.</div></div>`;
+ let last="";
+ for(const p of activity.slice().sort((a,b)=>ROLEORD[roleFor(a.id,a.group)]-ROLEORD[roleFor(b.id,b.group)]||a.name.localeCompare(b.name))){
+  const rl=roleFor(p.id,p.group);if(rl!==last){last=rl;h+=`<div class="mut" style="font-weight:800;margin:12px 4px 4px">${ROLES[rl].toUpperCase()}S</div>`}
+  const cnt=f=>days.filter(k=>(p.days[k]||"").includes(f)).length,hm=days.reduce((a,k)=>a+(+p.hmin[k]||0),0),t=(p.days[td]||"").includes("c");
+  h+=`<div class="card" style="padding:10px 12px;${me&&p.id===me.playerId?"border-color:var(--acc)":""}"><div class="row" style="border:0;padding:0"><b>${esc(p.name)}${me&&p.id===me.playerId?" (you)":""}</b><span>${p.streak?`🔥 ${p.streak} `:""}${t?"✅ today":'<span class="mut">not yet</span>'}</span></div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:8px 0 6px">${days.map((k,i)=>{const f=p.days[k]||"",ck=f.includes("c"),fut=k>td;return `<div style="text-align:center;font-size:10px;color:var(--mut)">${L[i]}<div style="margin-top:2px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;${ck?"background:var(--ok);color:#fff":fut?"background:var(--bg)":"background:var(--chip)"};${k===td?"box-shadow:0 0 0 2px var(--gold)":""}">${ck?"✓":""}</div></div>`}).join("")}</div>
+  ${(()=>{const bs=bdata[p.id];if(!bs)return"";const got=BADGES.filter(b=>b[3](bs));return `<details style="margin:6px 0 0"><summary>🏅 ${got.length} of ${BADGES.length} badges <span style="margin-left:6px;font-size:16px;letter-spacing:1px">${got.slice(0,10).map(b=>b[0]).join("")}</span></summary><div class="badges" style="margin-top:6px">${BADGES.slice().sort((a,b)=>b[3](bs)-a[3](bs)).map(([ic,n,d,f])=>`<div class="bd${f(bs)?"":" lock"}"><i>${ic}</i><b>${n}</b><div class="mut" style="font-size:11px">${d}</div></div>`).join("")}</div></details>`})()}<div class="mut" style="font-size:13px;margin-top:6px">🏋️ ${cnt("l")} · ⚡ ${cnt("s")}${rl!=="H"?` · ⚾ ${cnt("t")}`:""} · 🧘 ${cnt("m")}${rl!=="P"?` · 🏏 ${hm} min`:""}</div></div>`}
+ return h+`<div class="mut" style="font-size:12px;margin:8px 4px">You can see who showed up and what they got done. Scores, soreness and body weight stay private.</div>`}
+// ---- cage time leaderboard ----
+let cagesel="thisWeek";
+function cageView(){const opts=[["thisWeek","This week"],["avg","Weekly average"],["total","Season total"]];
+ let h=`<div class="card"><h3>🏏 Cage time</h3><div class="mut">Hitters and two-way players, ranked by minutes logged in the Hit tab.</div><select data-act="cagesel">${opts.map(([v,n])=>`<option value="${v}" ${cagesel===v?"selected":""}>${n}</option>`).join("")}</select>`;
+ const rows=board.filter(r=>r.hit&&(r.group==="H"||r.group==="TW"||r.hit.total>0)).map(r=>({n:r.name,v:r.hit[cagesel]||0,hit:r.hit})).filter(r=>r.v>0).sort((a,b)=>b.v-a.v).slice(0,20);
+ h+=rows.length?rows.map((r,i)=>`<div class="row${i<3?" medal m"+i:""}"><span>${MEDAL[i]||(i+1)+"."} ${esc(r.n)}${me&&r.n===me.name?" (you)":""}</span><b>${cagesel==="total"?(Math.round(r.v/6)/10)+" hrs":r.v+" min"} <span class="mut">(${r.hit.sessions} ${r.hit.sessions===1?"session":"sessions"})</span></b></div>`).join(""):'<div class="mut" style="margin-top:8px">No hitting logged yet. Log minutes in the Hit tab to get on the board.</div>';
+ return h+`</div>`}
+// ---- PR chat ----
+function chatView(){
+ let h=`<div class="card"><h3>💬 PR chat</h3><div class="mut">PRs show up here automatically. Hype your teammates, talk trash (clean), post your wins.</div><div class="line"><input type="text" id="cm" maxlength="240" placeholder="Say something to the team…" style="flex:1;min-width:0"><button class="p" data-act="cpost">Post</button></div>`;
+ const items=[...prs.map(r=>({t:r.d+" 00:00",pr:r})),...chat.map(c=>({t:c.t,c}))].sort((a,b)=>a.t<b.t?1:-1).slice(0,60);
+ h+=items.length?items.map(x=>x.pr?`<div class="row"><span>🏆 <b>${esc(x.pr.name)}</b> hit a PR<br><span class="mut">${esc(exName(x.pr.id))} · ${esc(x.pr.d)}</span></span><b>${x.pr.w} lb</b></div>`:`<div class="row"><span><b>${esc(x.c.name)}${x.c.coach?" 🧢":""}</b> <span class="mut">${esc(x.c.t.slice(5,16))}</span><br>${esc(x.c.text)}</span>${isCoach?`<button data-act="cdel" data-id="${esc(x.c.id)}" aria-label="Delete message">✕</button>`:""}</div>`).join(""):'<div class="mut" style="margin-top:8px">Quiet in here. Be the first to post.</div>';
+ return h+`</div>`}
+let bsub="goal",bsel="";
+const MEDAL=["🥇","🥈","🥉"];
+function liftList(){return allLifts().filter(x=>!x.noWt).map(x=>[x.id,x.name])}
+function teamView(){
+ const subs=[["goal","🎯 Goal"],["shout","📣 Shout-outs"],["lifts","🏅 Lifts"],["p4p","⚖️ P4P"],["cage","🏏 Cage time"],["prs","💬 PR chat"],["streaks","🔥 Streaks"]].concat(me?[["mine","⭐ Mine"]]:[]);if(!me&&bsub==="mine")bsub="goal";
+ let h=`<div class="subs sc">${subs.map(([c,l])=>`<button class="${bsub===c?"on":""}" data-act="bs" data-s="${c}">${l}</button>`).join("")}</div>`;
+ h=pinnedBar()+(boardErr?`<div class="msg">${esc(boardErr)}</div>`:"")+h;
+ const L=liftList();if(!bsel&&L.length)bsel=L[0][0];
+ if(bsub==="goal")return h+goalCard(true);
+ if(bsub==="shout")return h+shoutCard(true);
+ if(bsub==="p4p")return h+p4pView();
+ if(bsub==="cage")return h+cageView();
+ if(bsub==="lifts"){
+  h+=`<div class="card"><h3>Top 3 per lift</h3><div class="mut">Heaviest single-set weight logged. Gold, silver, bronze.</div>`;
+  h+=`<select data-act="bsel">${L.map(([id,n])=>`<option value="${esc(id)}" ${bsel===id?"selected":""}>${esc(n)}</option>`).join("")}</select>`;
+  const rows=board.map(r=>({n:r.name,w:+((r.lifts||{})[bsel]||0)})).filter(r=>r.w>0).sort((a,b)=>b.w-a.w).slice(0,3);
+  h+=rows.length?rows.map((r,i)=>`<div class="row medal m${i}"><span>${MEDAL[i]} ${esc(r.n)}${me&&r.me&&n===me.name?" (you)":""}</span><b>${r.w} lb</b></div>`).join(""):'<div class="mut" style="margin-top:8px">No weights logged for this lift yet. Be the first on the board.</div>';
+  h+=`</div><div class="card"><h3>Medal count</h3><div class="mut">Gold, silver and bronze across every lift.</div>`;
+  const mc={};for(const[id]of L){board.map(r=>({n:r.name,w:+((r.lifts||{})[id]||0)})).filter(r=>r.w>0).sort((a,b)=>b.w-a.w).slice(0,3).forEach((r,i)=>{(mc[r.n]=mc[r.n]||[0,0,0])[i]++})}
+  const mr=Object.entries(mc).sort((a,b)=>(b[1][0]-a[1][0])||(b[1][1]-a[1][1])||(b[1][2]-a[1][2]));
+  h+=mr.length?mr.map(([n,c])=>`<div class="row"><span>${esc(n)}${me&&n===me.name?" (you)":""}</span><b>🥇${c[0]} 🥈${c[1]} 🥉${c[2]}</b></div>`).join(""):'<div class="mut" style="margin-top:8px">No medals yet.</div>';
+  return h+`</div>`}
+ if(bsub==="prs")return h+chatView();
+ if(bsub==="streaks"){
+  const rows=board.slice().sort((a,b)=>(b.streak-a.streak)||(b.total-a.total));
+  h+=`<div class="card"><h3>🔥 Team streaks</h3><div class="mut">Consecutive days checked in. Don't break the chain.</div>`;
+  h+=rows.length?rows.map((r,i)=>`<div class="row"><span>${MEDAL[i]||(i+1)+"."} ${esc(r.name||"Player")}${me&&r.name===me.name?" (you)":""}</span><b>${r.streak||0} 🔥 <span class="mut">(${r.total||0} total)</span></b></div>`).join(""):'<div class="mut">Nobody has checked in yet. Be first.</div>';
+  return h+`</div>`}
+ const s=stats();h+=`<div class="card"><h3>⭐ My bests</h3><div class="mut">Your heaviest set for each lift, and where you rank.</div>`;
+ const mine=L.map(([id,n])=>{const w=s.maxLift[id]||0;if(!w)return"";const rank=board.filter(r=>+((r.lifts||{})[id]||0)>w).length;return `<div class="row"><span>${esc(n)}</span><b>${w} lb ${rank<3?MEDAL[rank]:""}</b></div>`}).join("");
+ return h+(mine||'<div class="mut" style="margin-top:8px">Log weights in the Lift tab and your bests show up here.</div>')+`</div>`}
+function meView(){
+ const s=stats(),g=groupOf();
+ let h=`<div class="card"><h3>${esc(me.name||"")}</h3><div class="mut">${ROLES[myRole()]}${showThrow()?" · throwing plan from your personal sheet":""}</div><div class="row"><span>Current streak</span><b>${s.streak} 🔥</b></div><div class="row"><span>Best streak</span><b>${s.best}</b></div><div class="row"><span>Check-ins</span><b>${s.total}</b></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;text-align:center">${[["🏋️","Lifts",s.lifts],["⚡","Sprints",s.sprints],["⚾","Throws",s.throws],["🧘","Mobility",s.mobs]].filter(x=>x[1]!=="Throws"||showThrow()).map(([i,n,v])=>`<div style="background:var(--chip);border-radius:14px;padding:10px 2px"><div style="font-size:20px">${i}</div><div style="font-size:20px;font-weight:800">${v}</div><div class="mut" style="font-size:11px">${n}</div></div>`).join("")}</div></div>`;
+ h+=`<div class="card"><h3>Badges · ${BADGES.filter(b=>b[3](s)).length} of ${BADGES.length}</h3><div class="badges">${BADGES.slice().sort((a,b)=>b[3](s)-a[3](s)).map(([ic,n,d,f])=>`<div class="bd${f(s)?"":" lock"}"><i>${ic}</i><b>${n}</b><div class="mut" style="font-size:11px">${d}</div></div>`).join("")}</div></div>`;
+ h+=`<div class="card"><h3>Settings</h3><div class="line"><label>Reminder email (10 AM check-in) <input type="email" id="em" value="${esc(me.email||"")}" placeholder="you@email.com" style="width:230px"></label><button data-act="esave">Save</button></div><div class="line"><label>Fall max MPH <input type="number" step="0.1" id="mx" value="${maxOf()||""}"></label><button data-act="msave">Save</button></div></div>`;
+ h+=`<div class="card"><h3>Put it on your home screen</h3><div class="mut"><b>iPhone:</b> open the link in Safari, tap Share, then Add to Home Screen.<br><b>Android:</b> Chrome menu, then Add to Home screen.<br><b>Mac:</b> Safari: File, Add to Dock. Chrome: ⋮ menu, Cast, save and share, Install page as app.</div></div><div class="card"><button data-act="logout">Sign out</button><div class="mut" style="margin-top:6px">Forgot your PIN? Ask Coach to reset it.</div></div>`;
+ return h+`<div class="save">${esc(status)}</div>`}
+// ---------- coach ----------
+const streakFrom=E=>{const s=new Set(Object.keys(E).filter(k=>E[k].r));let c=todayKey();if(!s.has(c))c=addDays(c,-1);let n=0;while(s.has(c)){n++;c=addDays(c,-1)}return n};
+function coachView(){
+ let h=`<div class="subs" style="grid-template-columns:repeat(4,1fr)">${[["team","Team"],["board","Board"],["post","Post"],["viewas","View as"],["detail","Player"],["roster","Roster"],["program","Program"],["export","Export"]].map(([c,l])=>`<button class="${ctab===c?"on":""}" data-act="ct" data-s="${c}">${l}</button>`).join("")}</div><div class="line"><button data-act="crefresh">↻ Refresh</button><span class="mut">Sheet: everything is also in the Google Sheet.</span></div>`;
+ if(ctab==="team"){h+=flagsCard();const days=[];for(let n=0;n<7;n++)days.push(addDays(todayKey(),n-6));
+  h+=`<p class="mut">Readiness, last 7 days. ≤4 red, ▲ = top MPH over cap, – = not checked in.</p><div class="tw"><table><tr><th>Player</th><th>Grp</th>${days.map(k=>`<th>${k.slice(5)}</th>`).join("")}<th>Streak</th></tr>`;
+  let lastR="";for(const p of players.slice().sort((a,b)=>ROLEORD[roleFor(a.id,a.group)]-ROLEORD[roleFor(b.id,b.group)])){const E=p.entries||{},g=p.group,mx=+p.fallMax,rl=roleFor(p.id,p.group);
+   if(rl!==lastR){lastR=rl;h+=`<tr><td colspan="10" style="background:var(--chip);font-weight:800">${ROLES[rl]}s</td></tr>`}
+   h+=`<tr><td>${esc(p.name)}${p.joined?"":' <span class="mut">(not signed in yet)</span>'}</td><td>${rl}</td>${days.map(k=>{const e=E[k]||{},w=weekOf(k),t=hasThrow(p.id)&&w>=0&&w<13?thFor(p.id,w,dIdx(k)):"",cap=capFor(mx,t),over=cap!=null&&e.mph&&+e.mph>cap;return `<td class="${e.r&&+e.r<=4?"r-low":""}">${e.r||"–"}${over?` <span class="r-low">▲</span>`:""}</td>`}).join("")}<td>${streakFrom(E)}</td></tr>`}
+  return h+`</table></div>`}
+ if(ctab==="post"){h+=`<div class="card"><h3>📌 Pinned message</h3><div class="mut">Shows at the top of every player's Today screen and the Board until you clear it.</div><textarea id="pt" maxlength="400" placeholder="Bus leaves at 6. Wear your Saints gear. Lift goes first.">${esc(pinned&&pinned.text||"")}</textarea><div class="line"><button class="p" data-act="ppost">Pin it</button><button data-act="ppost" onclick="document.getElementById('pt').value=''">Clear</button></div><div class="save">${esc(status)}</div></div>`;return h}
+ if(ctab==="board"){return h+teamView()}
+ if(ctab==="viewas"){h+=`<p class="mut">Open the full app exactly as a player sees it: Today, every tab, Schedule, Weight, Board and Me. Read only, nothing you tap changes their data.</p><div class="card">${players.slice().sort((a,b)=>ROLEORD[roleFor(a.id,a.group)]-ROLEORD[roleFor(b.id,b.group)]).map(p=>`<div class="row"><span>${esc(p.name)}<br><span class="mut">${ROLES[roleFor(p.id,p.group)]}</span></span><button data-act="vas" data-id="${p.id}">Open</button></div>`).join("")}</div>`;return h}
+ if(ctab==="detail"){h+=`<select data-act="dsel"><option value="">Choose player…</option>${players.map(p=>`<option value="${p.id}" ${dsel===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>`;
+  const p=players.find(x=>x.id===dsel);
+  if(p){const E=p.entries||{},g=p.group,mx=+p.fallMax;
+   h+=`<div class="card"><h3>${esc(p.name)}</h3><div class="mut">${hasThrow(p.id)?"Pitcher":"Position player"}${mx?" · fall max "+mx:""}${p.joined?"":" · hasn't signed in yet (seeded history only)"}</div></div>`;
+   const wk=Object.keys(p.weights||{}).sort();if(wk.length)h+=`<div class="card"><h3>Body weight</h3>${chart(wk.slice(-40).map(k=>[k,+p.weights[k]]),Math.floor(Math.min(...wk.map(k=>+p.weights[k]))-1),Math.ceil(Math.max(...wk.map(k=>+p.weights[k]))+1))}<div class="mut">Latest ${p.weights[wk[wk.length-1]]} lb</div></div>`;
+   const ks=Object.keys(E).sort().reverse();
+   h+=`<div class="tw"><table><tr><th>Date</th><th>Plan</th><th>R</th><th>MPH</th><th>Cap</th><th>Done</th><th>Note</th></tr>${ks.map(k=>{const e=E[k],w=weekOf(k),t=hasThrow(p.id)&&w>=0&&w<13?thFor(p.id,w,dIdx(k)):"",cap=capFor(mx,t);return `<tr><td>${k.slice(5)}</td><td>${esc(t.slice(0,38))}</td><td class="${+e.r<=4?"r-low":""}">${e.r||""}</td><td class="${cap&&+e.mph>cap?"r-low":""}">${e.mph||""}</td><td>${cap??""}</td><td>${e.throwDone?"T":""}${e.liftDone?"L":""}${e.sprintDone?"S":""}${e.mobDone?"M":""}</td><td>${esc(e.note||"")}</td></tr>`}).join("")}</table></div>`}
+  return h}
+ if(ctab==="roster"){if(!rost)rost=players.map(p=>({id:p.id,name:p.name,group:p.group,fallMax:p.fallMax,email:p.email||"",joined:p.joined}));
+  h+=`<p class="mut">Role (pitcher, hitter or two-way), fall max and email per player. Emails get the 10 AM readiness reminder. Players can also set their own in Me.</p><div class="tw"><table><tr><th>Name</th><th>Role</th><th>Email</th><th>Max</th><th></th></tr>${rost.map((p,i)=>`<tr data-i="${i}"><td><input type="text" data-act="rf" data-f="name" value="${esc(p.name)}"></td><td><select data-act="rf" data-f="group">${Object.entries(ROLES).map(([c,n])=>`<option value="${c}" ${roleFor(p.id,p.group)===c?"selected":""}>${n}</option>`).join("")}</select></td><td><input type="email" data-act="rf" data-f="email" value="${esc(p.email||"")}" placeholder="email"></td><td><input type="number" step="0.1" data-act="rf" data-f="fallMax" value="${esc(p.fallMax||"")}"></td><td><button data-act="rdel" data-i="${i}">✕</button></td></tr>`).join("")}</table></div><div class="line"><button data-act="radd">+ Add player</button><button class="p" data-act="rsave">Save roster</button></div><div class="save">${esc(status)}</div>`;return h}
+ if(ctab==="program"){h+=cycleEditor()+`<details class="card"><summary>Advanced: edit everything as JSON</summary><p class="mut">Lifting, sprint and mobility content as JSON. Replace with the winter block when ready. Day mapping: Mon = d1, Wed = d2, Thu = d3. "startWeek" is the ramp week (0 = Nov 16) where block week 1 starts.</p><textarea id="pj" style="min-height:300px;font-family:ui-monospace,monospace;font-size:12px">${esc(JSON.stringify(program||DEFAULT_PROGRAM,null,1))}</textarea><div class="line"><button class="p" data-act="psave">Save program</button></div></details><div class="save">${esc(status)}</div>`;return h}
+ h+=`<div class="card"><h3>Export</h3><p class="mut">Everything logged as CSV (or open the Google Sheet).</p><button class="p" data-act="csv">Download CSV</button></div><div class="save">${esc(status)}</div>`;return h}
+
+function redFlags(){const out=[],tk=todayKey(),y=addDays(tk,-1);
+ for(const p of players){const E=p.entries||{},mx=+p.fallMax,ks=Object.keys(E).filter(k=>E[k].r).sort(),f=[];
+  const last3=ks.slice(-3).map(k=>+E[k].r);
+  if(last3.length===3&&last3.every(x=>x<=4))f.push([3,"Low readiness 3 check-ins in a row ("+last3.join(", ")+")"]);
+  else if(ks.length&&ks[ks.length-1]>=y&&+E[ks[ks.length-1]].r<=3)f.push([2,"Readiness "+E[ks[ks.length-1]].r+" ("+ks[ks.length-1].slice(5)+")"]);
+  for(let n=0;n<7;n++){const k=addDays(tk,-n),e=E[k];if(!e||!e.mph)continue;const w=weekOf(k),t=hasThrow(p.id)&&w>=0&&w<13?thFor(p.id,w,dIdx(k)):"",cap=capFor(mx,t);if(cap!=null&&+e.mph>cap){f.push([3,"Over MPH cap "+e.mph+" vs "+cap+" ("+k.slice(5)+")"]);break}}
+  const arm=new Set(["lsh","rsh","lel","rel"]);
+  for(let n=0;n<3;n++){const e=E[addDays(tk,-n)];if(!e||!e.sore)continue;const hit=Object.keys(e.sore).filter(x=>e.sore[x]>=2);if(hit.length){const names=hit.map(x=>(SORE.find(s=>s[0]===x)||[0,x])[1]+" ("+SORENAME[e.sore[x]]+")");f.push([hit.some(x=>arm.has(x)||e.sore[x]>=3)?3:2,"Sore: "+names.join(", ")+" ("+addDays(tk,-n).slice(5)+")"]);break}}
+  if(p.joined&&tk>="2026-11-16"&&tk<="2027-02-14"){let miss=0;for(let n=1;n<=7;n++){if(E[addDays(tk,-n)]&&E[addDays(tk,-n)].r)break;miss++}if(miss>=2&&!(E[tk]&&E[tk].r))f.push([1,"No check-in for "+miss+" days"])}
+  if(f.length)out.push({p,f,sev:Math.max(...f.map(x=>x[0]))})}
+ return out.sort((a,b)=>b.sev-a.sev)}
+function flagsCard(){const r=redFlags();const col=["","#6b7280","#ff6d01","#c5221f"];
+ if(!players.length)return"";
+ let h=`<div class="card"><h3>🚩 Red flags${r.length?" ("+r.length+")":""}</h3>`;
+ h+=r.length?r.map(x=>`<div class="row"><span><b>${esc(x.p.name)}</b>${x.f.map(([s,t])=>`<br><span style="color:${col[s]}">● ${esc(t)}</span>`).join("")}</span><button data-act="vas" data-id="${x.p.id}">Open</button></div>`).join(""):'<div class="mut">Nothing flagged. Everyone looks good. ✅</div>';
+ return h+`<div class="mut" style="margin-top:6px;font-size:12px">Flags: readiness 4 or below three days running, over MPH cap, arm or moderate soreness, 2+ missed check-ins.</div></div>`}
+function exportCsv(){const rows=[["player","role","date","readiness","top_mph","cap","throw_done","lift_done","sprint_done","mobility_done","hit_minutes","hit_type","note"]];
+ for(const p of players){const g=p.group,mx=+p.fallMax;for(const k of Object.keys(p.entries||{}).sort()){const e=p.entries[k],w=weekOf(k),t=hasThrow(p.id)&&w>=0&&w<13?thFor(p.id,w,dIdx(k)):"";rows.push([p.name,g||"",k,e.r||"",e.mph||"",capFor(mx,t)??"",e.throwDone?1:"",e.liftDone?1:"",e.sprintDone?1:"",e.mobDone?1:"",(e.hit&&e.hit.min)||"",(e.hit&&e.hit.type)||"",e.note||""])}
+  for(const k of Object.keys(p.weights||{}).sort())rows.push([p.name,g||"",k,"","","","","","","","","","weigh-in "+p.weights[k]+" lb"])}
+ const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="thomas_more_ramp_log.csv";document.body.appendChild(a);a.click();a.remove()}
+async function loadCoach(){try{const r=await call("coachData",{coachPin});players=r.players;if(r.program)program=normProg(r.program);rost=null;paint()}catch(e){status=e.message;paint()}}
+let shout=null;
+async function loadBoard(){try{const r=await call("board",me?creds():{coachPin});shout=r.shout||null;boardErr=r.week?"":"The Board needs the newest backend. Coach: paste the latest Code.gs into Apps Script and redeploy as a New version.";board=r.board;prs=r.prs||[];chat=r.chat||[];week=r.week||null;if(r.pinned!==undefined)pinned=r.pinned;if(tab==="team"||(tab==="coach"&&ctab==="board"))paint()}catch(e){boardErr="Board could not load: "+(e.message||e);if(tab==="team"||(tab==="coach"&&ctab==="board"))paint()}}
+// ---------- paint ----------
+const TABS=[["today","📅","Today"],["sched","🗓️","Schedule"],["weight","⚖️","Weight"],["team","🏅","Board"],["roster","👥","Roster"],["me","👤","Me"]];
+const LOGO="data:image/png;base64,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";
+const cover=(sub)=>`<div class="cover"><img src="${LOGO}" alt="Saints Baseball"><div class="cv1">SAINTS BASEBALL</div><div class="cv2">${sub}</div></div>`;
+function loginCard(){ return cover("Winter Ramp · Daily check-in")+`<div class="card"><div class="mut" style="margin-bottom:8px">Pick your name and sign in. Each day: sign in, give your readiness number. That's the bare minimum and we'll celebrate it. ⚾</div>
+ <label class="mut">Your name</label><br><select id="pick"><option value="">Select your name…</option>${roster.map(p=>`<option value="${p.id}" ${p.id===loginPick?"selected":""}>${esc(p.name)}</option>`).join("")}</select>
+ <div class="line"><button class="p" data-act="login">Sign in</button></div>${loginErr?`<div class="msg">${esc(loginErr)}</div>`:""}</div>`}
+function paint(){
+ const a=$("app"),nav=$("nav");
+ if(err){a.innerHTML=`<div class="msg">${esc(err)}</div>`;nav.innerHTML="";return}
+ if(!loaded){a.innerHTML=cover("Loading…");nav.innerHTML="";return}
+ if(!me&&!isCoach){a.innerHTML=loginCard()+(showCoachLogin?`<div class="card"><div class="line"><input type="password" id="cpin" placeholder="Coach code" inputmode="numeric" style="width:160px"><button data-act="clogin">Coach sign-in</button></div></div>`:`<p class="mut" style="text-align:center"><a href="#" data-act="cshow">Coach sign-in</a></p>`);nav.innerHTML="";return}
+ const T=isCoach?(viewing?TABS:[["today","📅","Today"],["sched","🗓️","Schedule"],["team","🏅","Board"],["roster","👥","Roster"],["coach","🧢","Coach"]]):TABS;
+ if(!isCoach&&tab==="coach")tab="today";
+ nav.innerHTML=T.map(([c,ic,l])=>`<button class="${tab===c?"on":""}" data-act="tab" data-t="${c}"><span>${ic}</span>${l}</button>`).join("");
+ const s=me?stats():null;$("who").textContent=me?me.name+" · Winter Ramp":"Coach · Winter Ramp";
+ const sk=$("stk");if(s){sk.hidden=false;sk.textContent="🔥 "+s.streak}else sk.hidden=true;
+ const body=tab==="coach"?coachView():tab==="roster"?rosterView():!me?loginCard()+`<div class="msg">You're signed in as Coach. Sign in as a player to use the player screens.</div>`:tab==="today"?todayView():tab==="sched"?schedView():tab==="weight"?weightView():tab==="team"?teamView():tab==="roster"?rosterView():meView();
+ const bn=viewing?`<div class="msg" style="position:sticky;top:0;z-index:4">👁 Coach view: ${esc(me.name)} (read only). <button data-act="vexit">Back to Coach</button></div>`:"";
+ const y=scrollY;a.innerHTML=bn+body;scrollTo(0,y)}
+// ---------- events ----------
+function arm(b,label){if(b.dataset.armed){return true}b.dataset.armed="1";b.dataset.old=b.textContent;b.textContent=label;setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent=b.dataset.old}},3000);return false}
+const A=$("app");
+document.addEventListener("click",ev=>{const b=ev.target.closest("[data-act]");if(!b)return;const act=b.dataset.act;
+ if(act==="day"||act==="open"){sel=b.dataset.k;tab="today";paint();scrollTo(0,0)}
+ else if(act==="wk"){sel=addDays(sel,+b.dataset.n);paint()}
+ else if(act==="htt"){const k=b.dataset.k,t=b.dataset.t,cur=((((ents()[k]||{}).x||{}).ht||{}).types)||[];const nx=cur.includes(t)?cur.filter(z=>z!==t):[...cur,t];setHT(k,{types:nx});if(nx.length>cur.length)celebrate("Throwing logged ⚾ "+t);paint()}
+ else if(act==="hchip"){setHit(b.dataset.k,{min:+b.dataset.n});celebrate("Hitting logged 🏏 "+b.dataset.n+" min");paint()}
+ else if(act==="sub"){sub=b.dataset.s;paint()}
+ else if(act==="bs"){bsub=b.dataset.s;paint()}
+ else if(act==="sore"){const kk=b.dataset.k,p=b.dataset.p,cur={...((ents()[kk]||{}).sore||{})};const nx=((cur[p]||0)+1)%4;if(nx)cur[p]=nx;else delete cur[p];setEntry(kk,{sore:cur});paint()}
+ else if(act==="cpost"){const el=$("cm"),tx=(el.value||"").trim();if(!tx)return;b.disabled=true;call("chatPost",me?{...creds(),text:tx}:{coachPin,text:tx}).then(r=>{chat=r.chat||chat;paint()}).catch(e=>{status=e.message;b.disabled=false;celebrate(e.message)})}
+ else if(act==="cdel"){if(arm(b,"Sure?"))call("chatDelete",{coachPin,id:b.dataset.id}).then(r=>{chat=r.chat||chat;paint()}).catch(e=>celebrate(e.message))}
+ else if(act==="ppost"){const tx=$("pt").value.trim();call("coachSetPinned",{coachPin,text:tx}).then(()=>{pinned=tx?{text:tx}:null;status=tx?"Pinned ✓":"Cleared";paint()}).catch(e=>{status=e.message;paint()})}
+ else if(act==="vexit"){viewing=false;me=stash;stash=null;tab="coach";ctab="viewas";paint()}
+ else if(act==="vas"){const p=players.find(x=>x.id===b.dataset.id);if(p){if(!viewing)stash=me;viewing=true;me={playerId:p.id,name:p.name,group:p.group,fallMax:p.fallMax,goalWeight:p.goalWeight,entries:JSON.parse(JSON.stringify(p.entries||{})),weights:{...(p.weights||{})}};tab="today";sel=todayKey();paint();loadBoard();scrollTo(0,0)}}
+ else if(act==="ct"){ctab=b.dataset.s;paint();if(ctab==="board")loadBoard()}
+ else if(act==="cshow"){ev.preventDefault();showCoachLogin=true;paint()}
+ else if(act==="login"){const id=$("pick").value;loginPick=id;if(!id){loginErr="Pick your name first.";paint();return}
+  b.disabled=true;call("login",{playerId:id}).then(r=>{me=r.me;if(r.program)program=normProg(r.program);me.entries=me.entries||{};me.weights=me.weights||{};loginErr="";store.set("tmu_cred",JSON.stringify({playerId:id}));tab="today";paint();loadBoard()}).catch(e=>{loginErr=e.message;paint()})}
+ else if(act==="clogin"){const p=$("cpin").value;call("coachCheck",{coachPin:p}).then(()=>{coachPin=p;isCoach=true;store.set("tmu_coach",p);loadCoach()}).catch(e=>{loginErr="Wrong coach code";showCoachLogin=true;paint()})}
+ else if(act==="logout"){store.del("tmu_cred");me=null;pin="";tab="today";paint()}
+ else if(act==="esave"){me.email=($("em").value||"").trim();dirtyP=true;saveMe().then(()=>{celebrate("Reminder email saved ✉️");paint()})}
+ else if(act==="msave"){me.fallMax=+$("mx").value||0;dirtyP=true;saveMe().then(paint)}
+ else if(act==="wlog"){const d=$("wd").value,v=+$("wv").value;if(!d||!v)return;me.weights={...(me.weights||{}),[d]:v};dirtyW.add(d);saveMe().then(()=>{celebrate("Weigh-in logged. ⚖️ Consistency wins.");paint()})}
+ else if(act==="gsave"){me.goalWeight=+$("gw").value||0;dirtyP=true;saveMe().then(paint)}
+ else if(act==="wdel"){const w={...me.weights};delete w[b.dataset.k];me.weights=w;dirtyW.add(b.dataset.k);saveMe().then(paint)}
+ else if(act==="crefresh")loadCoach();
+ else if(act==="cycopy"){const cy=cycleAt(todayKey())||program;cyDraft={name:"",start:(cyDraft&&cyDraft.start)||"",t:["d1","d2","d3"].map(id=>((cy.days||[]).find(x=>x.id===id)||{}).title||""),x:["d1","d2","d3"].map(id=>liftsToText(((cy.days||[]).find(x=>x.id===id)||{lifts:[]}).lifts))};const cs=program.cycles;cyDraft.start=nextMonday(addDays(cs.slice().sort((a,b)=>a.start<b.start?1:-1)[0].start||CYCLE1,28));paint()}
+ else if(act==="cyadd"){const d=readCy();cyDraft=d;const cs=program.cycles||[];
+  if(!d.name){status="Give the cycle a name.";paint();return}
+  if(!d.start||new Date(d.start+"T12:00:00").getDay()!==1){status="The start date has to be a Monday.";paint();return}
+  if(cs.some(c=>c.start===d.start)){status="There is already a cycle starting that day.";paint();return}
+  const used=new Set(),days=[0,1,2].map(i=>({id:"d"+(i+1),title:d.t[i]||"Day "+(i+1),lifts:parseLifts(d.x[i],used)}));
+  if(days.some(x=>!x.lifts.length)){status="Each day needs at least one exercise line.";paint();return}
+  const cy={name:d.name,start:d.start,dayMap:{"0":"d1","2":"d2","3":"d3"},days};
+  const prog={...program,cycles:[...cs,cy].sort((a,b)=>(a.start||"")<(b.start||"")?-1:1)};
+  status="Saving…";paint();call("coachSaveProgram",{coachPin,program:prog}).then(()=>{program=normProg(prog);cyDraft=null;celebrate("Cycle added ✅");status="Cycle "+d.name+" added. Starts "+d.start}).catch(e=>{status=e.message}).then(()=>paint())}
+ else if(act==="cydel"){if(!arm(b,"Tap again to delete"))return;const prog={...program,cycles:program.cycles.filter((c,i)=>i!==+b.dataset.i)};call("coachSaveProgram",{coachPin,program:prog}).then(()=>{program=normProg(prog);status="Cycle deleted"}).catch(e=>{status=e.message}).then(()=>paint())}
+ else if(act==="rdel"){if(arm(b,"Sure?")){rost.splice(+b.dataset.i,1);paint()}}
+ else if(act==="radd"){rost.push({id:"p"+Date.now().toString(36),name:"New player",group:"",fallMax:0,email:""});paint()}
+ else if(act==="rpin"){const p=rost[+b.dataset.i];if(arm(b,"Sure?"))call("coachResetPin",{coachPin,id:p.id}).then(()=>{status="PIN reset";loadCoach()}).catch(e=>{status=e.message;paint()})}
+ else if(act==="rsave"){status="Saving…";paint();call("coachSaveRoster",{coachPin,players:rost}).then(()=>{status="Roster saved";loadCoach()}).catch(e=>{status=e.message;paint()})}
+ else if(act==="psave"){try{const j=JSON.parse($("pj").value);status="Saving…";paintStatus();call("coachSaveProgram",{coachPin,program:j}).then(()=>{program=normProg(j);status="Program saved"}).catch(e=>{status=e.message}).then(paintStatus)}catch(e){status="That isn't valid JSON: "+e.message;paintStatus()}}
+ else if(act==="csv")exportCsv();
+ else if(act==="tab"){tab=b.dataset.t;paint();scrollTo(0,0);if(tab==="team"&&me)loadBoard();if(tab==="roster")loadActivity();if(tab==="coach"&&isCoach)loadCoach()}});
+
+document.addEventListener("change",ev=>{const t=ev.target,act=t.dataset.act;if(!act)return;const k=t.dataset.k;
+ if(act==="bsel"){bsel=t.value;paint();return}
+ if(act==="p4sel"){p4sel=t.value;paint();return}
+ if(act==="cagesel"){cagesel=t.value;paint();return}
+ if(act==="xchk"){setX(k,{[t.dataset.f]:t.checked});if(t.checked)celebrate("Checked off. ✅");paint();return}
+ if(act==="hmin"){const before=+((ents()[k]||{}).hit||{}).min||0,v=t.value===""?"":+t.value;setHit(k,{min:v});if(v&&!before)celebrate("Hitting logged 🏏 "+v+" min");paint();return}
+ if(act==="htype"){setHit(k,{type:t.value});return}
+ if(act==="r"){const had=!!(ents()[k]&&ents()[k].r);setEntry(k,{r:+t.value});const s=stats();
+  if(k===todayKey()||!had)celebrate(msgFor(+t.value,s.streak));paint()}
+ else if(act==="chk"){setEntry(k,{[t.dataset.f]:t.checked});if(t.checked)celebrate(["Done. Nice work. ✅","Box checked. Keep stacking. 💪","That's how it's built. 🔥"][Math.floor(Math.random()*3)]);paint()}
+ else if(act==="mph"){setEntry(k,{mph:t.value===""?"":+t.value});paint()}
+ else if(act==="ls"){const id=t.dataset.id,i=+t.dataset.i,n=+t.dataset.n,cur=((ents()[k]||{}).lifts||{})[id];let arr=Array.isArray(cur)?cur.slice():(cur?[cur]:[]);while(arr.length<n)arr.push("");arr[i]=t.value===""?"":+t.value;const before=topOf(cur),pm=prevMax(id,k),v=+t.value||0;const L={...((ents()[k]||{}).lifts||{}),[id]:arr};setEntry(k,{lifts:L});if(v&&pm&&v>pm&&v>before){celebrate("NEW PR! 🏆💥 "+exName(id)+" "+v+" lb");paint()}}
+ else if(act==="grp"){me.group=t.value;dirtyP=true;saveMe().then(paint)}
+ else if(act==="dsel"){dsel=t.value;paint()}
+ else if(act==="rf"){const i=+t.closest("tr").dataset.i,f=t.dataset.f;rost[i][f]=f==="fallMax"?(+t.value||0):t.value}});
+document.addEventListener("input",ev=>{const t=ev.target;if(t.dataset.act==="note")setEntry(t.dataset.k,{note:t.value});if(t.dataset.act==="hnote")setHit(t.dataset.k,{note:t.value});if(t.dataset.act==="htnote")setHT(t.dataset.k,{note:t.value})});
+// ---------- init ----------
+async function init(){
+ paint();
+ try{
+  const b=await call("boot",{});roster=b.roster;pinned=b.pinned||null;program=normProg(b.program||DEFAULT_PROGRAM);
+  let c=null;try{c=JSON.parse(store.get("tmu_cred")||"null")}catch(e){}
+  if(c){try{const r=await call("login",c);me=r.me;if(r.program)program=normProg(r.program);me.entries=me.entries||{};me.weights=me.weights||{};loadBoard()}catch(e){store.del("tmu_cred")}}
+  const cp=store.get("tmu_coach");if(cp){try{await call("coachCheck",{coachPin:cp});coachPin=cp;isCoach=true;loadCoach()}catch(e){store.del("tmu_coach")}}
+ }catch(e){err="Couldn't reach the server. Check your connection and reload. ("+(e.message||e)+")"}
+ loaded=true;paint();
+}
+init();
+
+</script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+</body></html>
